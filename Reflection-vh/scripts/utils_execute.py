@@ -86,6 +86,7 @@ def get_current_state_prompt():
     return current_state_message
 
 current_state_prompt = get_current_state_prompt()
+print(current_state_prompt)
 
 def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None):
     final_states = []; initial_states = []; exec_per_task = []
@@ -195,11 +196,12 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                     state = objs.split(',')
                     state = "You see: " + ', '.join([i.strip() for i in state if any(ele in i for ele in assert_objs)])
                     # current_state = f"{current_state_prompt}\n\n{state}\n\n{action}\n"
-                    
                     current_state_message.append({"role": "user", "content": state})
                     current_state_message.append({"role": "user", "content": action})
                     _, check_state = ChatLM(current_state_message, args.gpt_version, 
                                         max_tokens=2, stop=["\n"])
+                    current_state_message.pop()
+                    current_state_message.pop()
                     log_file.write(f"State check:\n{state}\n{action}\n{check_state.strip()}\n")
                     continue
                 
@@ -220,56 +222,22 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                             current_state_message.append({"role": "user", "content": action})
                             _, check_state = ChatLM(current_state_message, args.gpt_version, 
                                                 max_tokens=2, stop=["\n"])
+                            current_state_message.pop()
+                            current_state_message.pop()
                             log_file.write(f"State check:\n{state}\n{action}\n{check_state.strip()}\n")
                     
                 # since above steps are not for env, following line go through the env
-                total_steps+=1
+                total_steps += 1
                 
                 ## parse next action
                 action = action.split(')')[0]
                 action = re.findall(r"\b[a-z]+", action)
 
-                if len(action)==3 and "put" in action[0]: # 2 objs action
-                    obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1] and node['id'] in agent_has_objid]
-                    obj_id2 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[2]]
-                    if len(obj_id1)==0:
-                        step+1; log_file.write("obj not in hand\n"); continue
-                    if len(obj_id1)==1:
-                        id1 = obj_id1[0]
-                    else:
-                        id1 = random.choice(obj_id1)
-                    
-                    if len(obj_id2)==0:
-                        step+1; log_file.write("obj not found\n"); continue
-                    elif len(obj_id2)==1:
-                        id2 = obj_id2[0]
-                    elif found_id in obj_id2:
-                        id2 = found_id
-                    else:
-                        id2 = random.choice(obj_id2)
-                    script_instruction = '<char0> [{}] <{}> ({}) <{}> ({})'.format(action[0], action[1], id1, action[2], id2)
-                elif len(action)==2 and action[0] not in ["find", "walk"]: # 1 obj action
-                    obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1]]
-                    if len(obj_id1)==1:
-                        id1 = obj_id1[0]
-                    elif found_id in obj_id1:
-                        id1 = found_id
-                    elif len(obj_id1)==0:
-                        step+1; log_file.write("obj not found\n"); continue
-                    else:
-                        id1 = random.choice(obj_id1)
-                    script_instruction = '<char0> [{}] <{}> ({})'.format(action[0], action[1], id1)
-                elif len(action)==2: # walk or find action
-                    obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1]]
-                    if len(obj_id1)==0:
-                        step+1; log_file.write("obj not found\n"); continue
-                    found_id = random.choice(obj_id1)
-                    script_instruction = '<char0> [{}] <{}> ({})'.format(action[0], action[1], found_id)
-                elif len(action)==1: # 0 object action
-                    script_instruction = '<char0> [{}]'.format(action[0])
-                else:
-                    log_file.write("bad action\n"); continue
-                
+                script_instruction, addstep, continue_flag = decode_action(action, graph, agent_has_objid, log_file)
+                step = step + addstep
+                if continue_flag is True:
+                    continue
+
                 ## execute next action in both envs: visual and graph
                 log_file.write(f"{script_instruction}\n")
                 _, m = comm.render_script([script_instruction], recording=False, skip_animation=True, find_solution=True)
@@ -286,61 +254,65 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                 
                 if not actstate:
                     log_file.write(f"act_state: {actstate}, message: {executor.info.get_error_string()}\n")
-                    # 执行失败了
-                    plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
-                    failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
-                    plangoal = " ".join(plangoal)
-                    failprompt = " ".join(failprompt) + plangoal
-                    FixState = reflection(plangoal, failprompt, init_prompt)
-
                     step += 1
-                else:
-                    # count execution if action executes succesfully in graph env
-                    executable_steps += 1
-                    # _, graph = comm.environment_graph()
-                    graph = final_state.to_dict()
-                    env_graph = EnvironmentGraph(graph)
-                    agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
-                    partial_graph = utils.get_visible_nodes(final_state.to_dict(), agent_id=agent)
-                    name_equivalence = utils.load_name_equivalence()
-                    executor = ScriptExecutor(env_graph, name_equivalence)
-                    script_instruction = ' '.join(re.findall(r"\b[a-z]+", script_instruction)[1:])
-                    step+=1
-
-                    # get new state info
-                    agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
-                    agent_in_roomid = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and n["relation_type"] == "INSIDE"][0]
-                    agent_in_room = [n['class_name'] for n in graph["nodes"] if n['id'] == agent_in_roomid][0]
-                    agent_has_objid = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and "HOLD" in n["relation_type"]]
-                    agent_has_obj = [n['class_name'] for n in graph["nodes"] if n['id'] in agent_has_objid]
-
-                    # Here you can get an observation, for instance 
-                    if 'grab' in script_instruction or 'open' in script_instruction or 'close' in script_instruction:
-                        s, im = comm.camera_image([cc-5], image_width=300, image_height=300)
+                    # 执行失败了
+                    FixState, finalstate, fixstep = ErrorHandle(init_prompt, executor, script, args, comm, graph, agent_has_objid, log_file)
+                    if FixState is True:
+                        print(f"Succesfully handle the error, and achieve the goal.We use {fixstep} to fix the problem.")
+                        log_file.write(f"Succesfully handle the error, and achieve the goal.We use {fixstep} step(s) to fix the problem.\n")
+                        step += fixstep
                     else:
-                        s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
-                    images.append(im[0])
+                        print(f"Can't handle the error. Please regenerate the task list.")
+                        log_file.write(f"Can't handle the error. Please regenerate the task list.\n")
+                        continue
 
-                    obj_ids_close = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and  n["relation_type"]=="CLOSE"]
-                    obj = [node['class_name'] for node in partial_graph['nodes'] if node["id"] in obj_ids_close]
-                    obj_ids = dict([(node['id'], node['class_name']) for node in partial_graph['nodes'] if node["id"] in obj_ids_close and node['class_name']!=agent_in_room])
-                    nodes_with_additional_states = add_additional_obj_states(partial_graph, obj_ids_for_adding_states, nodes_with_additional_states)
+                # else:
+                # count execution if action executes succesfully in graph env
+                executable_steps += 1
+                # _, graph = comm.environment_graph()
+                graph = final_state.to_dict()
+                env_graph = EnvironmentGraph(graph)
+                agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
+                partial_graph = utils.get_visible_nodes(final_state.to_dict(), agent_id=agent)
+                name_equivalence = utils.load_name_equivalence()
+                executor = ScriptExecutor(env_graph, name_equivalence)
+                script_instruction = ' '.join(re.findall(r"\b[a-z]+", script_instruction)[1:])
+                step+=1
 
-                    relations = list(set([obj_ids[n['from_id']] +' '+ n["relation_type"] +' '+ obj_ids[n['to_id']] for n in graph["edges"] if n['from_id'] in obj_ids and n['to_id'] in obj_ids and n["relation_type"]  not in ["CLOSE","FACING"]]))
-                    obj_states = [(node['class_name'], node['states']) for node in graph['nodes'] if node['class_name'] in obj]
-                    objs = ""
-                    for ob_states in obj_states:
-                        if len(ob_states[1])>0:
-                            objs = objs + ob_states[0] + ' is ' + ' and '.join(ob_states[1]) + ', '
-                        else:
-                            objs = objs + ob_states[0] + ', '
-                    objs = list(set(objs.split(', '))) 
-                    objs = [ob for ob in objs if len(ob)>0]
-                    objs = ', '.join(objs)+ ', ' + ', '.join(relations) + '. '
+                # get new state info
+                agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
+                agent_in_roomid = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and n["relation_type"] == "INSIDE"][0]
+                agent_in_room = [n['class_name'] for n in graph["nodes"] if n['id'] == agent_in_roomid][0]
+                agent_has_objid = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and "HOLD" in n["relation_type"]]
+                agent_has_obj = [n['class_name'] for n in graph["nodes"] if n['id'] in agent_has_objid]
 
-                    if len(agent_has_obj)>0:
-                        agent_has_obj = ', '.join(agent_has_obj)
-                        objs += f" You have {agent_has_obj}. "
+                # Here you can get an observation, for instance 
+                if 'grab' in script_instruction or 'open' in script_instruction or 'close' in script_instruction:
+                    s, im = comm.camera_image([cc-5], image_width=300, image_height=300)
+                else:
+                    s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
+                images.append(im[0])
+
+                obj_ids_close = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and  n["relation_type"]=="CLOSE"]
+                obj = [node['class_name'] for node in partial_graph['nodes'] if node["id"] in obj_ids_close]
+                obj_ids = dict([(node['id'], node['class_name']) for node in partial_graph['nodes'] if node["id"] in obj_ids_close and node['class_name']!=agent_in_room])
+                nodes_with_additional_states = add_additional_obj_states(partial_graph, obj_ids_for_adding_states, nodes_with_additional_states)
+
+                relations = list(set([obj_ids[n['from_id']] +' '+ n["relation_type"] +' '+ obj_ids[n['to_id']] for n in graph["edges"] if n['from_id'] in obj_ids and n['to_id'] in obj_ids and n["relation_type"]  not in ["CLOSE","FACING"]]))
+                obj_states = [(node['class_name'], node['states']) for node in graph['nodes'] if node['class_name'] in obj]
+                objs = ""
+                for ob_states in obj_states:
+                    if len(ob_states[1])>0:
+                        objs = objs + ob_states[0] + ' is ' + ' and '.join(ob_states[1]) + ', '
+                    else:
+                        objs = objs + ob_states[0] + ', '
+                objs = list(set(objs.split(', '))) 
+                objs = [ob for ob in objs if len(ob)>0]
+                objs = ', '.join(objs)+ ', ' + ', '.join(relations) + '. '
+
+                if len(agent_has_obj)>0:
+                    agent_has_obj = ', '.join(agent_has_obj)
+                    objs += f" You have {agent_has_obj}. "
                 
         # augment state with additional state info           
         final_state = final_state.to_dict()
@@ -350,9 +322,129 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
             
         # get final state for eval
         final_states.append(final_state)
-        exec_per_task.append(executable_steps/total_steps)
+        exec_per_task.append(executable_steps / total_steps)
     return final_states, initial_states, exec_per_task
 
+def decode_action(action, graph, agent_has_objid, log_file):
+    step = 0
+    if len(action)==3 and "put" in action[0]: # 2 objs action
+        obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1] and node['id'] in agent_has_objid]
+        obj_id2 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[2]]
+        if len(obj_id1)==0:
+            step+1; log_file.write("obj not in hand\n"); return None, step, True
+        if len(obj_id1)==1:
+            id1 = obj_id1[0]
+        else:
+            id1 = random.choice(obj_id1)
+        
+        if len(obj_id2)==0:
+            step+1; log_file.write("obj not found\n"); return None, step, True
+        elif len(obj_id2)==1:
+            id2 = obj_id2[0]
+        elif found_id in obj_id2:
+            id2 = found_id
+        else:
+            id2 = random.choice(obj_id2)
+        script_instruction = '<char0> [{}] <{}> ({}) <{}> ({})'.format(action[0], action[1], id1, action[2], id2)
 
-def reflection(taskgoal, errormessage, initprompt):
-    pass
+    elif len(action)==2 and action[0] not in ["find", "walk"]: # 1 obj action
+        obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1]]
+        if len(obj_id1)==1:
+            id1 = obj_id1[0]
+        elif found_id in obj_id1:
+            id1 = found_id
+        elif len(obj_id1)==0:
+            step+1; log_file.write("obj not found\n"); return None, step, True
+        else:
+            id1 = random.choice(obj_id1)
+        script_instruction = '<char0> [{}] <{}> ({})'.format(action[0], action[1], id1)
+
+    elif len(action)==2: # walk or find action
+        obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1]]
+        if len(obj_id1)==0:
+            step+1; log_file.write("obj not found\n"); return None, step, True
+        found_id = random.choice(obj_id1)
+        script_instruction = '<char0> [{}] <{}> ({})'.format(action[0], action[1], found_id)
+
+    elif len(action)==1: # 0 object action
+        script_instruction = '<char0> [{}]'.format(action[0])
+
+    else:
+        log_file.write("bad action\n"); return None, step, True
+    
+    return script_instruction, step, False
+
+
+examplefix = [{"role": "user", "content" : "An error occurred while executing the task. The error message is: character is not close to chips when executing PUTIN chips"},
+            {"role": "assistant", "content" : "find('chips')"}]
+
+def ErrorHandle(initprompt, executor, wishscript, args, comm, graph, agent_has_objid, log_file):
+    ACTION_FLAG = False
+    initprompt.extend(examplefix)
+    fixstep = 0
+
+    while ACTION_FLAG is False and fixstep < 5:
+        plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
+        failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
+        plangoal = " ".join(plangoal)
+        failprompt = " ".join(failprompt) + " " + plangoal
+    
+        initprompt.append({"role": "user", "content": "An error occurred while executing the task. The error message is:" + failprompt})
+        _, text = ChatLM(initprompt, 
+                    args.gpt_version, 
+                    max_tokens=600,
+                    stop='\n',
+                    frequency_penalty=0.15)
+        # LLM给出的修复的操作
+        print(text)
+
+        fixaction = text.split(')')[0]
+        fixaction = re.findall(r"\b[a-z]+", fixaction)
+        # 解析成脚本
+        script_instruction, addstep, continue_flag = decode_action(fixaction, graph, agent_has_objid, log_file)
+        fixstep = fixstep + addstep
+        if continue_flag is True:
+            continue
+
+        ## execute next action in both envs: visual and graph
+        log_file.write(f"{script_instruction}\n")
+        _, m = comm.render_script([script_instruction], recording=False, skip_animation=True, find_solution=True)
+        script = script_instruction[7:]
+        try:
+            script = parse_script_line(script, 0)
+        except:
+            fixstep+=1; continue
+
+        print(script)
+        actstate, final_state, _ = executor.execute(Script([script]))
+        log_file.write(f"FixAction: {script}, act_return: {actstate}\n")
+        fixstep += 1
+        if not actstate:
+            log_file.write(f"FixAction Fail!")
+            continue
+        else:
+            graph = final_state.to_dict()
+            env_graph = EnvironmentGraph(graph)
+            agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
+            partial_graph = utils.get_visible_nodes(final_state.to_dict(), agent_id=agent)
+            name_equivalence = utils.load_name_equivalence()
+            executor = ScriptExecutor(env_graph, name_equivalence)
+            script_instruction = ' '.join(re.findall(r"\b[a-z]+", script_instruction)[1:])
+
+            # # Here you can get an observation, for instance 
+            # if 'grab' in script_instruction or 'open' in script_instruction or 'close' in script_instruction:
+            #     s, im = comm.camera_image([cc-5], image_width=300, image_height=300)
+            # else:
+            #     s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
+            # images.append(im[0])
+
+            # 执行原先任务线的任务
+            TRYstate, final_state, _ = executor.execute(Script([wishscript]))
+            if not TRYstate:
+                log_file.write(f"TRYact_state: {TRYstate}, message: {executor.info.get_error_string()}\n")
+                continue
+            else:
+                log_file.write(f"TRYact: {wishscript}, TRYact_state: {TRYstate}\n")
+                return True, final_state, fixstep
+    
+    return ACTION_FLAG, final_state, fixstep
