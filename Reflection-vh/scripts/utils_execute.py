@@ -263,6 +263,7 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                 if not actstate:
                     log_file.write(f"act_state: {actstate}, message: {executor.info.get_error_string()}\n")
                     step += 1
+                    continue
                     # 执行失败了
                     FixState, finalstate, fixstep = ErrorHandle(init_prompt, executor, script, args, comm, graph, agent_has_objid, log_file)
                     if FixState is True:
