@@ -126,3 +126,12 @@ FixAction: [FIND] <fridge> (305) [0], act_return: True
 TRYact: [CLOSE] <fridge> (305) [0], TRYact_state: True
 Succesfully handle the error, and achieve the goal.We use 1 to fix the problem.
 ```
+
+
+
+inner monologue：Demo很牛
+
+我们工作的区别：
+
+1. 对于fail的explain
+2. 对于police的优化

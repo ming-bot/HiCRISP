@@ -87,6 +87,7 @@ def get_current_state_prompt():
 
 current_state_prompt = get_current_state_prompt()
 print(current_state_prompt)
+found_id = -1
 
 def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None):
     final_states = []; initial_states = []; exec_per_task = []
@@ -168,7 +169,7 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                     subgoals[sg].append(i)
         
         print(f"subgoals list:\n{subgoals}\n")
-        print(f"There are {len(subgoals)} subtask unit")
+        print(f"There are {len(subgoals) - 1} subtask unit")
 
         ## begin execution ##
         executable_steps = 0; total_steps = 0
@@ -177,7 +178,8 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
         statelist = list(subgoals.keys())
         steplist = np.arange(1, len(statelist))
         print(steplist)
-
+        global found_id
+        found_id = -1
         for subgoal in subgoals.keys():
             step = 1; act = ""
             for action in subgoals[subgoal]:
@@ -186,7 +188,11 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                     break
                 if "grab('wallphone')" in action:
                     continue
-                
+                # 去掉重复语句
+                if act == action:
+                    continue
+                else:
+                    act = action
                 ## state checking ##
 
                 # parse asserts and query LLM
@@ -235,6 +241,8 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
 
                 script_instruction, addstep, continue_flag = decode_action(action, graph, agent_has_objid, log_file)
                 step = step + addstep
+                if addstep == -1:
+                    total_steps += addstep 
                 if continue_flag is True:
                     continue
 
@@ -262,7 +270,7 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                         log_file.write(f"Succesfully handle the error, and achieve the goal.We use {fixstep} step(s) to fix the problem.\n")
                         step += fixstep
                     else:
-                        print(f"Can't handle the error. Please regenerate the task list.")
+                        print(f"Can't handle the error. Please regenerate the task list.\n")
                         log_file.write(f"Can't handle the error. Please regenerate the task list.\n")
                         continue
 
@@ -327,6 +335,7 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
 
 def decode_action(action, graph, agent_has_objid, log_file):
     step = 0
+    global found_id
     if len(action)==3 and "put" in action[0]: # 2 objs action
         obj_id1 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[1] and node['id'] in agent_has_objid]
         obj_id2 = [node['id'] for node in graph['nodes'] if node['class_name'] == action[2]]
@@ -370,16 +379,20 @@ def decode_action(action, graph, agent_has_objid, log_file):
         script_instruction = '<char0> [{}]'.format(action[0])
 
     else:
+        step-=1
         log_file.write("bad action\n"); return None, step, True
     
     return script_instruction, step, False
 
 
-examplefix = [{"role": "user", "content" : "An error occurred while executing the task. The error message is: character is not close to chips when executing PUTIN chips"},
-            {"role": "assistant", "content" : "find('chips')"}]
+examplefix = [{"role": "user", "content" : "An error occurred while executing the task. The error message is: character is not close to chips when executing PUTIN chips."},
+            {"role": "assistant", "content" : "find('chips')"},
+            {"role": "user", "content" : "An error occurred while executing the task. The error message is: fridge is not closed when executing OPEN fridge."},
+            {"role": "assistant", "content" : "close('fridge')"},]
 
 def ErrorHandle(initprompt, executor, wishscript, args, comm, graph, agent_has_objid, log_file):
     ACTION_FLAG = False
+    initprompt = initprompt.copy()
     initprompt.extend(examplefix)
     fixstep = 0
 
@@ -402,7 +415,10 @@ def ErrorHandle(initprompt, executor, wishscript, args, comm, graph, agent_has_o
         fixaction = re.findall(r"\b[a-z]+", fixaction)
         # 解析成脚本
         script_instruction, addstep, continue_flag = decode_action(fixaction, graph, agent_has_objid, log_file)
-        fixstep = fixstep + addstep
+        if addstep == -1:
+            continue
+        else:
+            fixstep = fixstep + addstep
         if continue_flag is True:
             continue
 
@@ -420,7 +436,7 @@ def ErrorHandle(initprompt, executor, wishscript, args, comm, graph, agent_has_o
         log_file.write(f"FixAction: {script}, act_return: {actstate}\n")
         fixstep += 1
         if not actstate:
-            log_file.write(f"FixAction Fail!")
+            log_file.write(f"FixAction Fail!\n")
             continue
         else:
             graph = final_state.to_dict()

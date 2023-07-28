@@ -1,0 +1,209 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'system', 'content': 'You can only use these functions: turnright, turnleft, walkforward, walktowards <obj>, walk <obj>, run <obj>, grab <obj>, switchon <obj>, switchoff <obj>, open <obj>, close <obj>, lookat <obj>, sit <obj>, standup, find <obj>, turnto <obj>, drink <obj>, pointat <obj>, watch <obj>, putin <obj> <obj>, putback <obj> <obj>'}, {'role': 'system', 'content': "You can only replace above obj with parameters in the following collection: \n\nobjects = ['oventray', 'wallpictureframe', 'peach', 'pie', 'bathroomcounter', 'bathtub', 'ceiling', 'condimentshaker', 'sofa', 'candle', 'coffeepot', 'closetdrawer', 'door', 'chips', 'powersocket', 'window', 'mouse', 'mug', 'dishwashingliquid', 'candybar', 'clothespile', 'box', 'radio', 'doorjamb', 'floor', 'folder', 'cutleryknife', 'chair', 'photoframe', 'slippers', 'pillow', 'coffeetable', 'bathroom', 'barsoap', 'paper', 'toaster', 'cpuscreen', 'closet', 'bananas', 'waterglass', 'book', 'coffeemaker', 'cabinet', 'stall', 'lightswitch', 'toothpaste', 'bookshelf', 'hairproduct', 'nightstand', 'creamybuns', 'mousemat', 'towelrack', 'tv', 'facecream', 'tablelamp', 'fryingpan', 'garbagecan', 'chocolatesyrup', 'cellphone', 'kitchencounterdrawer', 'stovefan', 'bathroomcabinet', 'clothespants', 'toilet', 'walllamp', 'cupcake', 'tvstand', 'kitchencabinet', 'computer', 'livingroom', 'painkillers', 'toothbrush', 'keyboard', 'microwave', 'bed', 'breadslice', 'wineglass', 'kitchencounter', 'ceilinglamp', 'bellpepper', 'dishbowl', 'fridge', 'remotecontrol', 'wallshelf', 'hanger', 'rug', 'sink', 'bedroom', 'clothesshirt', 'whippedcream', 'towel', 'plate', 'wallphone', 'wall', 'faucet', 'crackers', 'deodorant', 'clock', 'condimentbottle', 'cereal', 'salmon', 'cutleryfork', 'stove', 'bench', 'curtains', 'washingmachine', 'kitchentable', 'orchid', 'lime', 'perfume', 'kitchen', 'washingsponge', 'plum', 'desk', 'apple']"}, {'role': 'user', 'content': 'put_the_wine_glass_in_the_kitchen_cabinet'}, {'role': 'assistant', 'content': "def put_the_wine_glass_in_the_kitchen_cabinet():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find wine glass\n\tfind('wineglass')\n\t# 2: grab wine glass\n\tassert('close' to 'wineglass')\n\t\telse: find('wineglass')\n\tgrab('wineglass')\n\t# 3: find kitchen cabinet\n\tfind('kitchencabinet')\n\t# 4: open kitchen cabinet\n\tassert('close' to 'kitchencabinet' )  \n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'closed' )\n\t\telse: close('kitchencabinet')\n\topen('kitchencabinet')\n\t# 5: put wine glass in kitchen cabinet\n\tassert('wineglass' in 'hands' )\n\t\telse: find('wineglass')\n\t\telse: grab('wineglass')\n\tassert('close' to 'kitchencabinet' )  \n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'opened' )\n\t\telse: open('kitchencabinet')\n\tputin('wineglass', 'kitchencabinet')\n\t# 6: close kitchen cabinet\n\tassert('close' to 'kitchencabinet' )\n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'opened' )\n\t\telse: open('kitchencabinet')\n\tclose('kitchencabinet')\n\t# 7: Done"}, {'role': 'user', 'content': 'throw_away_the_lime'}, {'role': 'assistant', 'content': "def throw_away_the_lime():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find garbage can\n\tfind('garbagecan')\n\t# 2: grab lime\n\tfind('lime')\n\tassert('close' to 'lime')\n\t\telse: find('lime')\n\tgrab('lime')\n\t# 3: put lime in garbage can\n\tfind('garbagecan')\n\tassert('close' to 'garbagecan' )  \n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'closed' )\n\t\telse: close('garbagecan')\n\topen('garbagecan')\n\tassert('lime' in 'hands' )\n\t\telse: find('lime')\n\t\telse: grab('lime')\n\tassert('close' to 'garbagecan' )  \n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'opened' )\n\t\telse: open('garbagecan')\n\tputin('lime', 'garbagecan')\n\tassert('close' to 'garbagecan' )\n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'opened' )\n\t\telse: open('garbagecan')\n\tclose('garbagecan')\n\t# 4: Done"}, {'role': 'user', 'content': 'wash_mug'}, {'role': 'assistant', 'content': "def wash_mug():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find sink\n\tfind('sink')\n\t# 2: turn on faucet\n\tfind('faucet')\n\tfind('faucet')\n\tfind('faucet')\n\tassert('close' to 'faucet' )  \n\t\telse: find('faucet')\n\tassert('faucet' is 'switchoff' )\n\t\telse: switchoff('faucet')\n\tswitchon('faucet')\n\t# 3: put mug under water\n\tfind('mug')\n\tfind('mug')\n\tfind('mug')\n\tassert('close' to 'mug')\n\t\telse: find('mug')\n\tgrab('mug')\n\tfind('sink')\n\tassert('mug' in 'hands' )\n\t\telse: find('mug')\n\t\telse: grab('mug')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('mug', 'sink')\n\t# 4: grab dishwashing liquid\n\tfind('dishwashingliquid')\n\tassert('close' to 'dishwashingliquid')\n\t\telse: find('dishwashingliquid')\n\tgrab('dishwashingliquid')\n\t# 5: put dishwashing liquid on mug\n\tfind('sink')\n\tassert('dishwashingliquid' in 'hands' )\n\t\telse: find('dishwashingliquid')\n\t\telse: grab('dishwashingliquid')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('dishwashingliquid', 'sink')\n\t# 6: grab washingsponge\n\tfind('washingsponge')\n\tassert('close' to 'washingsponge')\n\t\telse: find('washingsponge')\n\tgrab('washingsponge')\n\t# 7: start scrubbing mug\n\tfind('sink')\n\tassert('washingsponge' in 'hands' )\n\t\telse: find('washingsponge')\n\t\telse: grab('washingsponge')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('washingsponge', 'sink')\n\t# 8: rinse mug off with water 1\n\t# 9: dry mug with towel 1\n\t# 10: Done\n\tfind('faucet')\n\tassert('close' to 'faucet' )\n\t\telse: find('faucet')\n\tassert('faucet' is 'switchon' )\n\t\telse: switchon('faucet')\n\tswitchoff('faucet')"}]
+
+----Test set tasks----
+['brush teeth', 'throw away apple', 'make toast']
+Total: 3 tasks
+
+----PROMPT for state check----
+[{'role': 'user', 'content': 'You see: microwave is OFF and CLOSED, lightswitch is ON, cereal, bookshelf, book is CLOSED, bookshelf ON floor, microwave ON kitchencounterdrawer, salmon ON microwave, book INSIDE bookshelf, dishbowl INSIDE bookshelf, clothespile INSIDE bookshelf, bananas INSIDE bookshelf, box ON bookshelf, book ON kitchentable, dishbowl ON bookshelf, condimentshaker INSIDE bookshelf, box INSIDE bookshelf, character HOLD_RH book, book ON rug, cereal ON wallshelf, plate INSIDE microwave, condimentbottle INSIDE bookshelf, microwave ON kitchencounter, paper INSIDE bookshelf'}, {'role': 'user', 'content': "assert('close' to 'mug' )"}, {'role': 'assistant', 'content': 'False'}, {'role': 'user', 'content': "assert('close' to 'microwave' )"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('book' is 'closed' )"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('lightswitch' is 'OFF')"}, {'role': 'assistant', 'content': 'False'}, {'role': 'user', 'content': "assert('book' in 'bookshelf')"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('book' in 'hands')"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('cereal' on 'bookshelf')"}, {'role': 'assistant', 'content': 'False'}]
+
+--Executing task: brush teeth--
+Plan:  def brush_teeth():
+	# 0: walk to bathroom
+	walk('bathroom')
+	# 1: find toothbrush
+	find('toothbrush')
+	# 2: grab toothbrush
+	assert('close' to 'toothbrush')
+		else: find('toothbrush')
+	grab('toothbrush')
+	# 3: find toothpaste
+	find('toothpaste')
+	# 4: grab toothpaste
+	assert('close' to 'toothpaste')
+		else: find('toothpaste')
+	grab('toothpaste')
+	# 5: turn on faucet
+	find('faucet')
+	find('faucet')
+	find('faucet')
+	assert('close' to 'faucet' )  
+		else: find('faucet')
+	assert('faucet' is 'switchoff' )
+		else: switchoff('faucet')
+	switchon('faucet')
+	# 6: wet toothbrush under water
+	find('toothbrush')
+	assert('toothbrush' in 'hands' )
+		else: find('toothbrush')
+		else: grab('toothbrush')
+	find('sink')
+	assert('close' to 'sink' )  
+		else: find('sink')
+	putin('toothbrush', 'sink')
+	# 7: apply toothpaste to toothbrush
+	find('toothpaste')
+	assert('toothpaste' in 'hands' )
+		else: find('toothpaste')
+		else: grab('toothpaste')
+	find('toothbrush')
+	assert('close' to 'toothbrush' )  
+		else: find('toothbrush')
+	putin('toothpaste', 'toothbrush')
+	# 8: brush teeth for 2 minutes
+	for i in range(120):
+		# brush teeth for 1 second
+		# 9: rinse toothbrush under water
+		find('toothbrush')
+		assert('toothbrush' in 'hands' )
+			else: find('toothbrush')
+			else: grab('toothbrush')
+		find('sink')
+		assert('close' to 'sink' )  
+			else: find('sink')
+		putin('toothbrush', 'sink')
+	# 10: turn off faucet
+	find('faucet')
+	assert('close' to 'faucet' )
+		else: find('faucet')
+	assert('faucet' is 'switchon' )
+		else: switchon('faucet')
+	switchoff('faucet')
+	# 11:Done
+
+<char0> [walk] <bathroom> (11)
+Action: [WALK] <bathroom> (11) [0], act_return: True
+<char0> [find] <toothbrush> (65)
+Action: [FIND] <toothbrush> (65) [0], act_return: True
+State check:
+You see: toothbrush, toothbrush ON bathroomcounter.
+assert('close' to 'toothbrush')
+True
+<char0> [grab] <toothbrush> (65)
+Action: [GRAB] <toothbrush> (65) [0], act_return: True
+<char0> [find] <toothpaste> (62)
+Action: [FIND] <toothpaste> (62) [0], act_return: True
+State check:
+You see: toothpaste is CLOSED, toothpaste ON bathroomcounter.  You have toothbrush.
+assert('close' to 'toothpaste')
+True
+<char0> [grab] <toothpaste> (62)
+Action: [GRAB] <toothpaste> (62) [0], act_return: True
+<char0> [find] <faucet> (248)
+Action: [FIND] <faucet> (248) [0], act_return: True
+State check:
+You see: faucet is OFF, faucet ON kitchencounter.  You have toothpaste
+assert('close' to 'faucet' )
+False
+<char0> [find] <faucet> (248)
+Action: [FIND] <faucet> (248) [0], act_return: True
+State check:
+You see: faucet is OFF, faucet ON kitchencounter.  You have toothpaste
+assert('faucet' is 'switchoff' )
+False
+<char0> [switchoff] <faucet> (248)
+Action: [SWITCHOFF] <faucet> (248) [0], act_return: False
+act_state: False, message: <faucet> (248) is not on when executing "[SWITCHOFF] <faucet> (248) [0]"
+<char0> [switchon] <faucet> (248)
+FixAction: [SWITCHON] <faucet> (248) [0], act_return: True
+TRYact: [SWITCHOFF] <faucet> (248) [0], TRYact_state: True
+Succesfully handle the error, and achieve the goal.We use 1 step(s) to fix the problem.
+State check:
+You see: faucet is OFF, faucet ON kitchencounter.  You have toothpaste
+switchon('faucet')
+I'm
+<char0> [switchon] <faucet> (248)
+Action: [SWITCHON] <faucet> (248) [0], act_return: True
+<char0> [find] <toothbrush> (65)
+Action: [FIND] <toothbrush> (65) [0], act_return: True
+State check:
+You see: toothbrush, toothbrush.
+assert('toothbrush' in 'hands' )
+False
+<char0> [find] <toothbrush> (65)
+Action: [FIND] <toothbrush> (65) [0], act_return: True
+<char0> [grab] <toothbrush> (65)
+Action: [GRAB] <toothbrush> (65) [0], act_return: False
+act_state: False, message: <character> (1) does not have a free hand when executing "[GRAB] <toothbrush> (65) [0]"
+<char0> [find] <toothbrush> (65)
+FixAction: [FIND] <toothbrush> (65) [0], act_return: True
+TRYact_state: False, message: <character> (1) does not have a free hand when executing "[GRAB] <toothbrush> (65) [0]"
+<char0> [find] <toothbrush> (65)
+FixAction: [FIND] <toothbrush> (65) [0], act_return: True
+TRYact_state: False, message: <character> (1) does not have a free hand when executing "[GRAB] <toothbrush> (65) [0]"
+<char0> [find] <toothbrush> (65)
+FixAction: [FIND] <toothbrush> (65) [0], act_return: True
+TRYact_state: False, message: <character> (1) does not have a free hand when executing "[GRAB] <toothbrush> (65) [0]"
+<char0> [find] <toothbrush> (65)
+FixAction: [FIND] <toothbrush> (65) [0], act_return: True
+TRYact_state: False, message: <character> (1) does not have a free hand when executing "[GRAB] <toothbrush> (65) [0]"
+<char0> [find] <toothbrush> (65)
+FixAction: [FIND] <toothbrush> (65) [0], act_return: True
+TRYact_state: False, message: <character> (1) does not have a free hand when executing "[GRAB] <toothbrush> (65) [0]"
+Can't handle the error. Please regenerate the task list.
+State check:
+You see: toothbrush, toothbrush.
+find('sink')
+I'm
+<char0> [find] <sink> (247)
+Action: [FIND] <sink> (247) [0], act_return: True
+State check:
+You see: sink
+assert('close' to 'sink' )
+False
+<char0> [find] <sink> (247)
+Action: [FIND] <sink> (247) [0], act_return: True
+State check:
+You see: sink
+putin('toothbrush', 'sink')
+I'm
+<char0> [putin] <toothbrush> (65) <sink> (247)
+Action: [PUTIN] <toothbrush> (65) <sink> (247) [0], act_return: True
+<char0> [find] <toothpaste> (62)
+Action: [FIND] <toothpaste> (62) [0], act_return: True
+State check:
+You see: toothpaste is CLOSED, .  You have toothpaste.
+assert('toothpaste' in 'hands' )
+True
+<char0> [find] <toothbrush> (65)
+Action: [FIND] <toothbrush> (65) [0], act_return: True
+State check:
+You see: 
+assert('close' to 'toothbrush' )
+I'm
+bad action
+<char0> [putin] <toothpaste> (62) <toothbrush> (65)
+Action: [PUTIN] <toothpaste> (62) <toothbrush> (65) [0], act_return: True
+bad action
+<char0> [find] <toothbrush> (65)
+Action: [FIND] <toothbrush> (65) [0], act_return: True
+State check:
+You see: 
+assert('toothbrush' in 'hands' )
+False
+<char0> [find] <toothbrush> (65)
+Action: [FIND] <toothbrush> (65) [0], act_return: True
+<char0> [grab] <toothbrush> (65)
+Action: [GRAB] <toothbrush> (65) [0], act_return: True
+State check:
+You see: toothbrush, .  You have toothbrush.
+find('sink')
+I'm
+<char0> [find] <sink> (247)
+Action: [FIND] <sink> (247) [0], act_return: True
+State check:
+You see: sink
+assert('close' to 'sink' )
+False
+<char0> [find] <sink> (247)
+Action: [FIND] <sink> (247) [0], act_return: True
+State check:
+You see: sink
+putin('toothbrush', 'sink')
+I'm
+<char0> [putin] <toothbrush> (65) <sink> (247)
+Action: [PUTIN] <toothbrush> (65) <sink> (247) [0], act_return: True
+<char0> [find] <faucet> (50)
+Action: [FIND] <faucet> (50) [0], act_return: True
