@@ -246,6 +246,7 @@ def planner_executer(args):
                                                                 log_file,
                                                                 init_prompt = prompt)
     print("exec_per_task: ", exec_per_task)
+    log_file.wirte(f"\nexec_per_task: {exec_per_task}\n")
 
     #evaluate
     # final_states_GT = []
@@ -298,13 +299,13 @@ if __name__ == "__main__":
     parser.add_argument("--prompt-task-examples-ablation", type=str, default="none", 
                          choices=['none', 'no_comments', "no_feedback", "no_comments_feedback"])
 
-    # parser.add_argument("--load-generated-plans", type=bool, default=False)
-    parser.add_argument("--load-generated-plans", type=bool, default=True)
+    parser.add_argument("--load-generated-plans", type=bool, default=False)
+    # parser.add_argument("--load-generated-plans", type=bool, default=True)
     
     args = parser.parse_args()
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
     if not osp.isdir(f"{args.progprompt_path}/results/"):
-            os.makedirs(f"{args.progprompt_path}/results/")
+        os.makedirs(f"{args.progprompt_path}/results/")
 
     planner_executer(args=args)

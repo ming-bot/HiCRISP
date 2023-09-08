@@ -20,7 +20,7 @@ from virtualhome.simulation.evolving_graph.execution import ScriptExecutor
 from virtualhome.simulation.evolving_graph.environment import EnvironmentGraph
 import time
 import re
-
+import copy
 from utils_aug_env import get_obj_ids_for_adding_states, add_additional_obj_states
 import requests
 import os
@@ -263,9 +263,9 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                 if not actstate:
                     log_file.write(f"act_state: {actstate}, message: {executor.info.get_error_string()}\n")
                     step += 1
-                    continue
+                    # continue
                     # 执行失败了
-                    FixState, finalstate, fixstep = ErrorHandle(init_prompt, executor, script, args, comm, graph, agent_has_objid, log_file)
+                    FixState, finalstate, fixstep = ErrorHandle(init_prompt, executor, script_instruction, args, comm, graph, agent_has_objid, log_file, cc, images)
                     if FixState is True:
                         print(f"Succesfully handle the error, and achieve the goal.We use {fixstep} to fix the problem.")
                         log_file.write(f"Succesfully handle the error, and achieve the goal.We use {fixstep} step(s) to fix the problem.\n")
@@ -386,34 +386,49 @@ def decode_action(action, graph, agent_has_objid, log_file):
     return script_instruction, step, False
 
 
-examplefix = [{"role": "user", "content" : "An error occurred while executing the task. The error message is: character is not close to chips when executing PUTIN chips."},
+examplefix = [{"role": "user", "content" : "An error occurred. The error message is: character is not close to chips when executing PUTIN chips."},
             {"role": "assistant", "content" : "find('chips')"},
-            {"role": "user", "content" : "An error occurred while executing the task. The error message is: fridge is not closed when executing OPEN fridge."},
+            {"role": "user", "content" : "An error occurred. The error message is: fridge is not closed when executing OPEN fridge."},
             {"role": "assistant", "content" : "close('fridge')"},]
 
-def ErrorHandle(initprompt, executor, wishscript, args, comm, graph, agent_has_objid, log_file):
-    ACTION_FLAG = False
+def ErrorHandle(initprompt, executor, wishscript_instruction, args, comm, graph, agent_has_objid, log_file, cc, images):
+    # ACTION_FLAG = False
     initprompt = initprompt.copy()
     initprompt.extend(examplefix)
     fixstep = 0
 
-    while ACTION_FLAG is False and fixstep < 5:
-        plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
-        failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
-        plangoal = " ".join(plangoal)
-        failprompt = " ".join(failprompt) + " " + plangoal
-    
-        initprompt.append({"role": "user", "content": "An error occurred while executing the task. The error message is:" + failprompt})
+    # fix action stack
+    failinfolist = []
+    fixgoal = []
+    fixgoal.append(copy.copy(wishscript_instruction))
+
+    plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
+    plangoal = " ".join(plangoal)
+    failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
+    failprompt = " ".join(failprompt) + " " + plangoal
+    failinfolist.append(copy.copy(failprompt))
+
+    while len(failinfolist) > 0 and fixstep < 5:
+        # plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
+        # failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
+        # plangoal = " ".join(plangoal)
+        # failprompt = " ".join(failprompt) + " " + plangoal
+        failpromptit = "An error occurred. The error message is: " + failinfolist[-1]
+        print(failpromptit)
+        initprompt.append({"role": "user", "content": failpromptit})
         _, text = ChatLM(initprompt, 
                     args.gpt_version, 
                     max_tokens=600,
                     stop='\n',
                     frequency_penalty=0.15)
+        initprompt.pop()
         # LLM给出的修复的操作
-        print(text)
+        print(f"FixAction: {text}.\n")
 
         fixaction = text.split(')')[0]
         fixaction = re.findall(r"\b[a-z]+", fixaction)
+        log_file.write(f"--------------------\n")
+        print(f"--------------------\n")
         # 解析成脚本
         script_instruction, addstep, continue_flag = decode_action(fixaction, graph, agent_has_objid, log_file)
         if addstep == -1:
@@ -424,44 +439,75 @@ def ErrorHandle(initprompt, executor, wishscript, args, comm, graph, agent_has_o
             continue
 
         ## execute next action in both envs: visual and graph
-        log_file.write(f"{script_instruction}\n")
+        log_file.write(f"Fixaction_script : {script_instruction}\n")
         _, m = comm.render_script([script_instruction], recording=False, skip_animation=True, find_solution=True)
         script = script_instruction[7:]
         try:
             script = parse_script_line(script, 0)
         except:
-            fixstep+=1; continue
+            fixstep += 1; continue
 
-        print(script)
+        fixgoal.append(script_instruction)
         actstate, final_state, _ = executor.execute(Script([script]))
         log_file.write(f"FixAction: {script}, act_return: {actstate}\n")
+        print((f"FixAction: {script}, act_return: {actstate}\n"))
         fixstep += 1
         if not actstate:
             log_file.write(f"FixAction Fail!\n")
+            plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
+            failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
+            plangoal = " ".join(plangoal)
+            failprompt = " ".join(failprompt) + " " + plangoal
+            failprompt_add = "An error occurred. The error message is: " + failprompt
+            failinfolist.append(copy.copy(failprompt_add))
             continue
         else:
-            graph = final_state.to_dict()
-            env_graph = EnvironmentGraph(graph)
-            agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
-            partial_graph = utils.get_visible_nodes(final_state.to_dict(), agent_id=agent)
-            name_equivalence = utils.load_name_equivalence()
-            executor = ScriptExecutor(env_graph, name_equivalence)
-            script_instruction = ' '.join(re.findall(r"\b[a-z]+", script_instruction)[1:])
+            while len(fixgoal) > 1:
+                fixgoal.pop()
 
-            # # Here you can get an observation, for instance 
-            # if 'grab' in script_instruction or 'open' in script_instruction or 'close' in script_instruction:
-            #     s, im = comm.camera_image([cc-5], image_width=300, image_height=300)
-            # else:
-            #     s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
-            # images.append(im[0])
+                graph = final_state.to_dict()
+                env_graph = EnvironmentGraph(graph)
+                agent = [n['id'] for n in graph["nodes"] if n['class_name'] == 'character'][0]
+                partial_graph = utils.get_visible_nodes(final_state.to_dict(), agent_id=agent)
+                name_equivalence = utils.load_name_equivalence()
+                executor = ScriptExecutor(env_graph, name_equivalence)
+                script_instruction = ' '.join(re.findall(r"\b[a-z]+", script_instruction)[1:])
 
-            # 执行原先任务线的任务
-            TRYstate, final_state, _ = executor.execute(Script([wishscript]))
-            if not TRYstate:
-                log_file.write(f"TRYact_state: {TRYstate}, message: {executor.info.get_error_string()}\n")
-                continue
-            else:
-                log_file.write(f"TRYact: {wishscript}, TRYact_state: {TRYstate}\n")
-                return True, final_state, fixstep
-    
+                # Here you can get an observation, for instance 
+                if 'grab' in script_instruction or 'open' in script_instruction or 'close' in script_instruction:
+                    s, im = comm.camera_image([cc-5], image_width=300, image_height=300)
+                else:
+                    s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
+                images.append(im[0])
+
+                # 执行原先任务线的任务
+                ## execute next action in both envs: visual and graph
+                script_instruction = fixgoal[-1]
+                log_file.write(f"Fixaction_script : {script_instruction}\n")
+                _, m = comm.render_script([script_instruction], recording=False, skip_animation=True, find_solution=True)
+                script = script_instruction[7:]
+                try:
+                    script = parse_script_line(script, 0)
+                except:
+                    fixstep += 1; continue
+
+                TRYstate, final_state, _ = executor.execute(Script([script]))
+                if not TRYstate:
+                    log_file.write(f"TRYact_state: {TRYstate}, message: {executor.info.get_error_string()}\n")
+                    print(f"TRYact_state: {TRYstate}, message: {executor.info.get_error_string()}\n")
+
+                    plangoal = re.findall(r"\b[a-z,A-Z]+", executor.info.get_error_string().split('"')[1])
+                    failprompt = re.findall(r"\b[a-z]+", executor.info.get_error_string().split('"')[0])
+                    plangoal = " ".join(plangoal)
+                    failprompt = " ".join(failprompt) + " " + plangoal
+                    failprompt_add = "An error occurred. The error message is: " + failprompt
+                    failinfolist[-1] = copy.copy(failprompt_add)
+                    break
+                else:
+                    log_file.write(f"TRYact: {script}, TRYact_state: {TRYstate}\n")
+                    print(f"TRYact: {script}, TRYact_state: {TRYstate}\n")
+                    failinfolist.pop()
+
+    ACTION_FLAG = True if len(failinfolist) == 0 else False
+
     return ACTION_FLAG, final_state, fixstep
