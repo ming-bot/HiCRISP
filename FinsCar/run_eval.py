@@ -90,7 +90,7 @@ if __name__ == "__main__":
     parser.add_argument("--expt-name", type=str, required=True)
 
     parser.add_argument("--openai-api-key", type=str, 
-                        default="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")
+                        default="sk-y")
 
     parser.add_argument("--gpt-version", type=str, default="gpt-3.5-turbo-16k", 
                         choices=['gpt-3.5-turbo', 'gpt-3.5-turbo-0613', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-16k-0613'])
