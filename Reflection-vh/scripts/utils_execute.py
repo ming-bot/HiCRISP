@@ -263,17 +263,19 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                 if not actstate:
                     log_file.write(f"act_state: {actstate}, message: {executor.info.get_error_string()}\n")
                     step += 1
-                    # continue
-                    # 执行失败了
-                    FixState, finalstate, fixstep = ErrorHandle(init_prompt, executor, script_instruction, args, comm, graph, agent_has_objid, log_file, cc, images)
-                    if FixState is True:
-                        print(f"Succesfully handle the error, and achieve the goal.We use {fixstep} to fix the problem.")
-                        log_file.write(f"Succesfully handle the error, and achieve the goal.We use {fixstep} step(s) to fix the problem.\n")
-                        step += fixstep
-                    else:
-                        print(f"Can't handle the error. Please regenerate the task list.\n")
-                        log_file.write(f"Can't handle the error. Please regenerate the task list.\n")
+                    if not args.use_HiCRISP:
                         continue
+                    else:
+                        # 执行失败了
+                        FixState, finalstate, fixstep = ErrorHandle(init_prompt, executor, script_instruction, args, comm, graph, agent_has_objid, log_file, cc, images)
+                        if FixState is True:
+                            print(f"Succesfully handle the error, and achieve the goal.We use {fixstep} to fix the problem.")
+                            log_file.write(f"Succesfully handle the error, and achieve the goal.We use {fixstep} step(s) to fix the problem.\n")
+                            step += fixstep
+                        else:
+                            print(f"Can't handle the error. Please regenerate the task list.\n")
+                            log_file.write(f"Can't handle the error. Please regenerate the task list.\n")
+                            continue
 
                 # else:
                 # count execution if action executes succesfully in graph env
@@ -301,6 +303,7 @@ def run_execution(args, comm, test_tasks, gen_plan, log_file, init_prompt = None
                 else:
                     s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
                 images.append(im[0])
+                # time.sleep(5)
 
                 obj_ids_close = [n['to_id'] for n in graph["edges"] if n['from_id'] == agent and  n["relation_type"]=="CLOSE"]
                 obj = [node['class_name'] for node in partial_graph['nodes'] if node["id"] in obj_ids_close]
@@ -396,6 +399,7 @@ def ErrorHandle(initprompt, executor, wishscript_instruction, args, comm, graph,
     initprompt = initprompt.copy()
     initprompt.extend(examplefix)
     fixstep = 0
+    lastfixstep = ""
 
     # fix action stack
     failinfolist = []
@@ -437,7 +441,12 @@ def ErrorHandle(initprompt, executor, wishscript_instruction, args, comm, graph,
             fixstep = fixstep + addstep
         if continue_flag is True:
             continue
+        # 重复动作
+        if lastfixstep == script_instruction:
+            fixstep += 1
+            continue
 
+        lastfixstep = script_instruction
         ## execute next action in both envs: visual and graph
         log_file.write(f"Fixaction_script : {script_instruction}\n")
         _, m = comm.render_script([script_instruction], recording=False, skip_animation=True, find_solution=True)
@@ -479,6 +488,7 @@ def ErrorHandle(initprompt, executor, wishscript_instruction, args, comm, graph,
                 else:
                     s, im = comm.camera_image([cc-6], image_width=300, image_height=300)
                 images.append(im[0])
+                # time.sleep(5)
 
                 # 执行原先任务线的任务
                 ## execute next action in both envs: visual and graph

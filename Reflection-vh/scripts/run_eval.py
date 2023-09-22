@@ -246,24 +246,24 @@ def planner_executer(args):
                                                                 log_file,
                                                                 init_prompt = prompt)
     print("exec_per_task: ", exec_per_task)
-    log_file.wirte(f"\nexec_per_task: {exec_per_task}\n")
+    log_file.write(f"\nexec_per_task: {exec_per_task}\n")
 
     #evaluate
-    # final_states_GT = []
-    # with open(f'{args.progprompt_path}/data/final_states/final_states_{args.test_set}.json', 'r') as f:
-    #     for line in f.readlines():
-    #         final_states_GT.append((json.loads(line)))
+    final_states_GT = []
+    with open(f'{args.progprompt_path}/data/final_states/final_states_{args.test_set}.json', 'r') as f:
+        for line in f.readlines():
+            final_states_GT.append((json.loads(line)))
 
-    # results = eval(final_states, 
-    #      final_states_GT, 
-    #      initial_states, 
-    #      test_tasks,
-    #      exec_per_task,
-    #      log_file)
+    results = eval(final_states, 
+         final_states_GT, 
+         initial_states, 
+         test_tasks,
+         exec_per_task,
+         log_file)
 
-    # print(f"\n----Results----\n{results['overall']}\n")
-    # with open(f"{args.progprompt_path}/results/{log_filename}_metric.json", 'w') as f:
-    #     json.dump(results, f)
+    print(f"\n----Results----\n{results['overall']}\n")
+    with open(f"{args.progprompt_path}/results/{log_filename}_metric.json", 'w') as f:
+        json.dump(results, f)
     log_file.close()
 
 
@@ -280,11 +280,11 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=str, default="8080")
     parser.add_argument("--display", type=str, default="0")
     
-    parser.add_argument("--gpt-version", type=str, default="gpt-3.5-turbo-16k", 
+    parser.add_argument("--gpt-version", type=str, default="gpt-3.5-turbo-0613", 
                         choices=['gpt-3.5-turbo', 'gpt-3.5-turbo-0613', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-16k-0613'])
     parser.add_argument("--env-id", type=int, default=0)
-    parser.add_argument("--test-set", type=str, default="test_unseen1", 
-                        choices=['test_unseen', 'test_seen', 'test_unseen_ambiguous', 'env1', 'env2', "test_unseen1"])
+    parser.add_argument("--test-set", type=str, default="test_unseen", 
+                        choices=['test_unseen', 'test_seen', 'test_unseen_ambiguous', 'env1', 'env2'])
 
     parser.add_argument("--prompt-task-examples", type=str, default="default", 
                         choices=['default', 'random'])
@@ -299,9 +299,12 @@ if __name__ == "__main__":
     parser.add_argument("--prompt-task-examples-ablation", type=str, default="none", 
                          choices=['none', 'no_comments', "no_feedback", "no_comments_feedback"])
 
-    parser.add_argument("--load-generated-plans", type=bool, default=False)
-    # parser.add_argument("--load-generated-plans", type=bool, default=True)
-    
+    # parser.add_argument("--load-generated-plans", type=bool, default=False)
+    # parser.add_argument("--use-HiCRISP", type=bool, default=False)
+
+    parser.add_argument("--load-generated-plans", type=bool, default=True)
+    parser.add_argument("--use-HiCRISP", type=bool, default=True)
+
     args = parser.parse_args()
     openai.api_key = os.getenv("OPENAI_API_KEY")
 

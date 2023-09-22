@@ -1,137 +1,38 @@
-# ReflectionLLMrobot
-拥有自我反思的LLM机器人
+# HiCRISP
+This is the code release for the paper : [HiCRISP: A Hierarchical Closed-Loop Robotic Intelligent Self-Correction Planner](http://arxiv.org/abs/2309.12089). It contains code for VisualHome simulation ( edited from [Progprompt](https://github.com/NVlabs/progprompt-vh) ) and Real AGV platform.
 
 
 
-## 实验日记
+## Setup
 
-#### 7.26 开始新的辛酸历程
+We test our following system on windows11,  python3.9.12.
 
-##### 7.26 11点实验
+### 1. Establish environment
 
-ChatCompletion.create接口，上层命令为Bring the chips to the sofa，执行成功。参数如下：
+To obtain detailed instructions on how to download  [VirtualHome](https://github.com/xavierpuigf/virtualhome), you may refer to  [Progprompt](https://github.com/NVlabs/progprompt-vh).
 
-```python
-"--gpt-version", type=str, default="gpt-3.5-turbo-0613“
-```
+### 2. Run VirtualHome experience
 
-执行指令如下：
+1. run the unity UI of VirualHome, it locates in 
 
-```python
-<char0> [find] <chips> (328)
-State check:
-You see: chips, chips ON wallshelf.
-assert('close' to 'chips')
-True
-<char0> [grab] <chips> (328)
-<char0> [walk] <sofa> (368)
-State check:
-You see: chips, sofa ON rug.  You have chips.
-assert('chips' in 'hands')
-True
-<char0> [puton] <chips> (328) <sofa> (368)
-```
+   ```shell
+   \virtualhome\src\virtualhome\simulation\unity_simulator\windows_exec.v2.3.0
+   ```
 
-##### 7.26 13点实验
+   in my computer. Also you can change the arguments in the $run\_eval.py$ to open simulator automatically. 
 
-ChatCompletion.create接口，上层命令为测试集内容。0725文件。
+2. run evaluation. Here is a minimal example how to run the evaluation script. Replace {arguments in curly braces} with appropriate values on your system:
+
+   ```python
+   python3 scripts/run_eval.py --expt-name {expt_name}
+   ```
+
+   We have fixed the majority of the parameters, and these parameters do not have a significant impact on validating the effectiveness of our framework. You can easily change them if you think it is important.
+
+### 3. Run Real AGV experience
+
+​	Regrettably, the connection to our remote physical platform in the laboratory is currently under development. However, we warmly welcome you to visit our laboratory in person to conduct experiments. We will make the source code open-source as a frame of reference, with the hope that it can assist you in deploying the next stage of work on a new robotic platform.
 
 
 
-#### 7.27实验日记
-
-##### 7.27 14点实验
-
-当assert假言gpt回答错误时，可能会导致后续执行操作的bug，即这里的PUTIN操作的失败：
-
-```python
-State check:
-You see: salmon, .  You have salmon.
-assert('salmon' in 'hands' )
-False
-<char0> [find] <salmon> (327)
-Action: [FIND] <salmon> (327) [0], act_return: True
-<char0> [grab] <salmon> (327)
-Action: [GRAB] <salmon> (327) [0], act_return: True
-State check:
-You see: 
-assert('close' to 'fridge' )
-I'm
-bad action
-State check:
-You see: 
-assert('fridge' is 'opened' )
-I'm
-bad action
-<char0> [putin] <salmon> (327) <fridge> (305)
-Action: [PUTIN] <salmon> (327) <fridge> (305) [0], act_return: False
-act_state: False, message: <character> (1) is not close to <fridge> (305) when executing "[PUTIN] <salmon> (327) <fridge> (305) [0]"
-State check:
-You see: 
-assert('close' to 'fridge' )
-I'm
-bad action
-State check:
-You see: 
-assert('fridge' is 'opened' )
-I'm
-bad action
-<char0> [close] <fridge> (305)
-Action: [CLOSE] <fridge> (305) [0], act_return: False
-act_state: False, message: <character> (1) is not close to <fridge> (305) when executing "[PUTIN] <salmon> (327) <fridge> (305) [0]",<character> (1) is not close to <fridge> (305) when executing "[CLOSE] <fridge> (305) [0]"
-```
-
-将这失败信息重新输入GPT让它去生成解决方案，解决完再次尝试刚刚失败的动作，循环直到失败动作被修复。（有点类似单片机的异常处理）修复后的执行：
-
-```python
-State check:
-You see: salmon, .  You have salmon.
-assert('salmon' in 'hands' )
-False
-<char0> [find] <salmon> (327)
-Action: [FIND] <salmon> (327) [0], act_return: True
-<char0> [grab] <salmon> (327)
-Action: [GRAB] <salmon> (327) [0], act_return: True
-State check:
-You see: 
-assert('close' to 'fridge' )
-I'm
-bad action
-State check:
-You see: 
-assert('fridge' is 'opened' )
-I'm
-bad action
-<char0> [putin] <salmon> (327) <fridge> (305)
-Action: [PUTIN] <salmon> (327) <fridge> (305) [0], act_return: False
-act_state: False, message: <character> (1) is not close to <fridge> (305) when executing "[PUTIN] <salmon> (327) <fridge> (305) [0]"
-<char0> [find] <fridge> (305)
-FixAction: [FIND] <fridge> (305) [0], act_return: True
-TRYact: [PUTIN] <salmon> (327) <fridge> (305) [0], TRYact_state: True
-Succesfully handle the error, and achieve the goal.We use 1 to fix the problem.State check:
-You see: 
-assert('close' to 'fridge' )
-I'm
-bad action
-State check:
-You see: 
-assert('fridge' is 'opened' )
-I'm
-bad action
-<char0> [close] <fridge> (305)
-Action: [CLOSE] <fridge> (305) [0], act_return: False
-act_state: False, message: <character> (1) is not close to <fridge> (305) when executing "[CLOSE] <fridge> (305) [0]"
-<char0> [find] <fridge> (305)
-FixAction: [FIND] <fridge> (305) [0], act_return: True
-TRYact: [CLOSE] <fridge> (305) [0], TRYact_state: True
-Succesfully handle the error, and achieve the goal.We use 1 to fix the problem.
-```
-
-
-
-inner monologue：Demo很牛
-
-我们工作的区别：
-
-1. 对于fail的explain
-2. 对于police的优化
+Note: Due to the limitations of the author's expertise, the code requires you to **modify the paths and undertake other necessary adjustments according to your system**. The overall portability aspect of the code could be improved, and we welcome any criticism and suggestions from everyone to help with its modification.

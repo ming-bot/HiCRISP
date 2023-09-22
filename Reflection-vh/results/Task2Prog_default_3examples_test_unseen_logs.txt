@@ -1,0 +1,112 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'system', 'content': 'You can only use these functions: turnright, turnleft, walkforward, walktowards <obj>, walk <obj>, run <obj>, grab <obj>, switchon <obj>, switchoff <obj>, open <obj>, close <obj>, lookat <obj>, sit <obj>, standup, find <obj>, turnto <obj>, drink <obj>, pointat <obj>, watch <obj>, putin <obj> <obj>, putback <obj> <obj>'}, {'role': 'system', 'content': "You can only replace above obj with parameters in the following collection: \n\nobjects = ['plum', 'crackers', 'powersocket', 'tv', 'livingroom', 'washingsponge', 'cutleryknife', 'bench', 'kitchen', 'washingmachine', 'kitchentable', 'creamybuns', 'chocolatesyrup', 'rug', 'computer', 'mug', 'towelrack', 'candle', 'clothesshirt', 'photoframe', 'hairproduct', 'apple', 'coffeemaker', 'bathroom', 'cellphone', 'ceiling', 'wallpictureframe', 'oventray', 'condimentshaker', 'toaster', 'desk', 'cpuscreen', 'coffeepot', 'cereal', 'kitchencounter', 'bathroomcabinet', 'sink', 'plate', 'kitchencabinet', 'condimentbottle', 'waterglass', 'cutleryfork', 'salmon', 'mousemat', 'toilet', 'paper', 'lightswitch', 'whippedcream', 'facecream', 'toothbrush', 'painkillers', 'clothespants', 'closetdrawer', 'bellpepper', 'cabinet', 'lime', 'radio', 'barsoap', 'folder', 'towel', 'wallphone', 'bed', 'pie', 'nightstand', 'faucet', 'bananas', 'box', 'remotecontrol', 'wallshelf', 'book', 'keyboard', 'ceilinglamp', 'fridge', 'chair', 'kitchencounterdrawer', 'breadslice', 'curtains', 'walllamp', 'candybar', 'toothpaste', 'floor', 'garbagecan', 'wall', 'bathroomcounter', 'hanger', 'sofa', 'fryingpan', 'peach', 'doorjamb', 'wineglass', 'door', 'pillow', 'closet', 'dishwashingliquid', 'orchid', 'microwave', 'mouse', 'stove', 'bathtub', 'tvstand', 'stall', 'perfume', 'chips', 'coffeetable', 'tablelamp', 'deodorant', 'window', 'bedroom', 'stovefan', 'bookshelf', 'clock', 'cupcake', 'slippers', 'dishbowl', 'clothespile']"}, {'role': 'user', 'content': 'put_the_wine_glass_in_the_kitchen_cabinet'}, {'role': 'assistant', 'content': "def put_the_wine_glass_in_the_kitchen_cabinet():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find wine glass\n\tfind('wineglass')\n\t# 2: grab wine glass\n\tassert('close' to 'wineglass')\n\t\telse: find('wineglass')\n\tgrab('wineglass')\n\t# 3: find kitchen cabinet\n\tfind('kitchencabinet')\n\t# 4: open kitchen cabinet\n\tassert('close' to 'kitchencabinet' )  \n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'closed' )\n\t\telse: close('kitchencabinet')\n\topen('kitchencabinet')\n\t# 5: put wine glass in kitchen cabinet\n\tassert('wineglass' in 'hands' )\n\t\telse: find('wineglass')\n\t\telse: grab('wineglass')\n\tassert('close' to 'kitchencabinet' )  \n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'opened' )\n\t\telse: open('kitchencabinet')\n\tputin('wineglass', 'kitchencabinet')\n\t# 6: close kitchen cabinet\n\tassert('close' to 'kitchencabinet' )\n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'opened' )\n\t\telse: open('kitchencabinet')\n\tclose('kitchencabinet')\n\t# 7: Done"}, {'role': 'user', 'content': 'throw_away_the_lime'}, {'role': 'assistant', 'content': "def throw_away_the_lime():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find garbage can\n\tfind('garbagecan')\n\t# 2: grab lime\n\tfind('lime')\n\tassert('close' to 'lime')\n\t\telse: find('lime')\n\tgrab('lime')\n\t# 3: put lime in garbage can\n\tfind('garbagecan')\n\tassert('close' to 'garbagecan' )  \n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'closed' )\n\t\telse: close('garbagecan')\n\topen('garbagecan')\n\tassert('lime' in 'hands' )\n\t\telse: find('lime')\n\t\telse: grab('lime')\n\tassert('close' to 'garbagecan' )  \n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'opened' )\n\t\telse: open('garbagecan')\n\tputin('lime', 'garbagecan')\n\tassert('close' to 'garbagecan' )\n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'opened' )\n\t\telse: open('garbagecan')\n\tclose('garbagecan')\n\t# 4: Done"}, {'role': 'user', 'content': 'wash_mug'}, {'role': 'assistant', 'content': "def wash_mug():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find sink\n\tfind('sink')\n\t# 2: turn on faucet\n\tfind('faucet')\n\tfind('faucet')\n\tfind('faucet')\n\tassert('close' to 'faucet' )  \n\t\telse: find('faucet')\n\tassert('faucet' is 'switchoff' )\n\t\telse: switchoff('faucet')\n\tswitchon('faucet')\n\t# 3: put mug under water\n\tfind('mug')\n\tfind('mug')\n\tfind('mug')\n\tassert('close' to 'mug')\n\t\telse: find('mug')\n\tgrab('mug')\n\tfind('sink')\n\tassert('mug' in 'hands' )\n\t\telse: find('mug')\n\t\telse: grab('mug')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('mug', 'sink')\n\t# 4: grab dishwashing liquid\n\tfind('dishwashingliquid')\n\tassert('close' to 'dishwashingliquid')\n\t\telse: find('dishwashingliquid')\n\tgrab('dishwashingliquid')\n\t# 5: put dishwashing liquid on mug\n\tfind('sink')\n\tassert('dishwashingliquid' in 'hands' )\n\t\telse: find('dishwashingliquid')\n\t\telse: grab('dishwashingliquid')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('dishwashingliquid', 'sink')\n\t# 6: grab washingsponge\n\tfind('washingsponge')\n\tassert('close' to 'washingsponge')\n\t\telse: find('washingsponge')\n\tgrab('washingsponge')\n\t# 7: start scrubbing mug\n\tfind('sink')\n\tassert('washingsponge' in 'hands' )\n\t\telse: find('washingsponge')\n\t\telse: grab('washingsponge')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('washingsponge', 'sink')\n\t# 8: rinse mug off with water 1\n\t# 9: dry mug with towel 1\n\t# 10: Done\n\tfind('faucet')\n\tassert('close' to 'faucet' )\n\t\telse: find('faucet')\n\tassert('faucet' is 'switchon' )\n\t\telse: switchon('faucet')\n\tswitchoff('faucet')"}]
+
+----Test set tasks----
+['put salmon in the fridge']
+Total: 1 tasks
+
+----PROMPT for state check----
+[{'role': 'user', 'content': 'You see: microwave is OFF and CLOSED, lightswitch is ON, cereal, bookshelf, book is CLOSED, bookshelf ON floor, microwave ON kitchencounterdrawer, salmon ON microwave, book INSIDE bookshelf, dishbowl INSIDE bookshelf, clothespile INSIDE bookshelf, bananas INSIDE bookshelf, box ON bookshelf, book ON kitchentable, dishbowl ON bookshelf, condimentshaker INSIDE bookshelf, box INSIDE bookshelf, character HOLD_RH book, book ON rug, cereal ON wallshelf, plate INSIDE microwave, condimentbottle INSIDE bookshelf, microwave ON kitchencounter, paper INSIDE bookshelf'}, {'role': 'user', 'content': "assert('close' to 'mug' )"}, {'role': 'assistant', 'content': 'False'}, {'role': 'user', 'content': "assert('close' to 'microwave' )"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('book' is 'closed' )"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('lightswitch' is 'OFF')"}, {'role': 'assistant', 'content': 'False'}, {'role': 'user', 'content': "assert('book' in 'bookshelf')"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('book' in 'hands')"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('cereal' on 'bookshelf')"}, {'role': 'assistant', 'content': 'False'}]
+
+--Executing task: put salmon in the fridge--
+Plan:  def put_salmon_in_the_fridge():
+	# 0: walk to kitchen
+	walk('kitchen')
+	# 1: find fridge
+	find('fridge')
+	# 2: open fridge
+	assert('close' to 'fridge' )  
+		else: find('fridge')
+	assert('fridge' is 'closed' )
+		else: close('fridge')
+	open('fridge')
+	# 3: find salmon
+	find('salmon')
+	# 4: grab salmon
+	assert('close' to 'salmon')
+		else: find('salmon')
+	grab('salmon')
+	# 5: put salmon in fridge
+	assert('salmon' in 'hands' )
+		else: find('salmon')
+		else: grab('salmon')
+	assert('close' to 'fridge' )  
+		else: find('fridge')
+	assert('fridge' is 'opened' )
+		else: open('fridge')
+	putin('salmon', 'fridge')
+	# 6: close fridge
+	assert('close' to 'fridge' )
+		else: find('fridge')
+	assert('fridge' is 'opened' )
+		else: open('fridge')
+	close('fridge')
+	# 7:Done
+
+<char0> [walk] <kitchen> (205)
+Action: [WALK] <kitchen> (205) [0], act_return: True
+<char0> [find] <fridge> (305)
+Action: [FIND] <fridge> (305) [0], act_return: True
+State check:
+You see: fridge is CLOSED, fridge ON floor.
+assert('close' to 'fridge' )
+True
+State check:
+You see: fridge is CLOSED, fridge ON floor.
+assert('fridge' is 'closed' )
+True
+<char0> [open] <fridge> (305)
+Action: [OPEN] <fridge> (305) [0], act_return: True
+<char0> [find] <salmon> (327)
+Action: [FIND] <salmon> (327) [0], act_return: True
+State check:
+You see: salmon, salmon ON microwave.
+assert('close' to 'salmon')
+False
+<char0> [find] <salmon> (327)
+Action: [FIND] <salmon> (327) [0], act_return: True
+State check:
+You see: salmon, salmon ON microwave.
+grab('salmon')
+You grab
+<char0> [grab] <salmon> (327)
+Action: [GRAB] <salmon> (327) [0], act_return: True
+State check:
+You see: salmon, .  You have salmon.
+assert('salmon' in 'hands' )
+False
+<char0> [find] <salmon> (327)
+Action: [FIND] <salmon> (327) [0], act_return: True
+<char0> [grab] <salmon> (327)
+Action: [GRAB] <salmon> (327) [0], act_return: True
+State check:
+You see: 
+assert('close' to 'fridge' )
+I'm
+bad action
+State check:
+You see: 
+assert('fridge' is 'opened' )
+I'm
+bad action
+<char0> [putin] <salmon> (327) <fridge> (305)
+Action: [PUTIN] <salmon> (327) <fridge> (305) [0], act_return: False
+act_state: False, message: <character> (1) is not close to <fridge> (305) when executing "[PUTIN] <salmon> (327) <fridge> (305) [0]"
+State check:
+You see: 
+assert('close' to 'fridge' )
+I'm
+bad action
+State check:
+You see: 
+assert('fridge' is 'opened' )
+I'm
+bad action
+<char0> [close] <fridge> (305)
+Action: [CLOSE] <fridge> (305) [0], act_return: False
+act_state: False, message: <character> (1) is not close to <fridge> (305) when executing "[PUTIN] <salmon> (327) <fridge> (305) [0]",<character> (1) is not close to <fridge> (305) when executing "[CLOSE] <fridge> (305) [0]"
+
+exec_per_task: [0.8]
+
+unsatisfied state conditions: relations: {'lightswitch CLOSE character', 'character CLOSE lightswitch', 'character INSIDE bathroom'}, object states: {'lightswitch OFF'}

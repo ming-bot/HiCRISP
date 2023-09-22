@@ -1,0 +1,25 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'system', 'content': 'You can only use these functions: moveto <obj>, avoidtrap <obj>'}, {'role': 'system', 'content': 'You can only replace above obj with parameters in the following collection: \n\nobjects = Area1, Area2, Area3'}, {'role': 'user', 'content': 'cover area by the order: 1, 2, 3'}, {'role': 'assistant', 'content': "def cover_area_1_2_3():\n\t# 0: move to area 1\n\tmoveto('Area1')\n\t# 1: move to area 2\n\tmoveto('Area2')\n\t# 2: move to area 3\n\tmoveto('Area3')\n\t# 3: Done"}, {'role': 'user', 'content': 'cover area by the order: 2, 1, 3'}, {'role': 'assistant', 'content': "def cover_area_2_1_3():\n\t# 0: move to area 2\n\tmoveto('Area2')\n\t# 1: move to area 1\n\tmoveto('Area1')\n\t# 2: move to area 3\n\tmoveto('Area3')\n\t# 3: Done"}]
+
+----Test set tasks----
+['cover area by the order: 3, 2, 1']
+Total: 1 tasks
+
+--Executing task: cover area by the order: 3, 2, 1--
+Plan:  def cover_area_3_2_1():
+	# 0: move to area 3
+	moveto('Area3')
+	# 1: move to area 2
+	moveto('Area2')
+	# 2: move to area 1
+	moveto('Area1')
+	# 3:Done
+
+moveto <Area3>
+act_state: False, message: The Car faces some traps in the road.
+
+--------------------
+avoidtrap <Area3>
+--------------------
+FixAction_Return: False

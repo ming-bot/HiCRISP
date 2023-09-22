@@ -1,0 +1,96 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'system', 'content': 'You can only use these functions: turnright, turnleft, walkforward, walktowards <obj>, walk <obj>, run <obj>, grab <obj>, switchon <obj>, switchoff <obj>, open <obj>, close <obj>, lookat <obj>, sit <obj>, standup, find <obj>, turnto <obj>, drink <obj>, pointat <obj>, watch <obj>, putin <obj> <obj>, putback <obj> <obj>'}, {'role': 'system', 'content': "You can only replace above obj with parameters in the following collection: \n\nobjects = ['candle', 'tablelamp', 'tv', 'towelrack', 'bathroom', 'crackers', 'stall', 'toothbrush', 'bookshelf', 'tvstand', 'window', 'painkillers', 'wineglass', 'rug', 'chips', 'stovefan', 'mouse', 'cutleryfork', 'wall', 'clothespile', 'lightswitch', 'door', 'slippers', 'chair', 'wallphone', 'bathroomcabinet', 'condimentbottle', 'bedroom', 'box', 'bananas', 'computer', 'toothpaste', 'perfume', 'washingsponge', 'curtains', 'book', 'powersocket', 'bathroomcounter', 'sofa', 'coffeemaker', 'toilet', 'clothespants', 'orchid', 'deodorant', 'garbagecan', 'photoframe', 'towel', 'wallpictureframe', 'cupcake', 'oventray', 'coffeetable', 'bellpepper', 'kitchencabinet', 'wallshelf', 'hanger', 'clothesshirt', 'kitchencounter', 'kitchen', 'chocolatesyrup', 'cutleryknife', 'apple', 'remotecontrol', 'floor', 'salmon', 'candybar', 'lime', 'bench', 'keyboard', 'hairproduct', 'whippedcream', 'coffeepot', 'bathtub', 'cabinet', 'folder', 'mousemat', 'walllamp', 'kitchencounterdrawer', 'sink', 'stove', 'bed', 'livingroom', 'dishbowl', 'closetdrawer', 'pie', 'fryingpan', 'desk', 'kitchentable', 'fridge', 'ceilinglamp', 'barsoap', 'waterglass', 'toaster', 'peach', 'creamybuns', 'closet', 'cellphone', 'condimentshaker', 'ceiling', 'mug', 'pillow', 'clock', 'nightstand', 'cpuscreen', 'washingmachine', 'dishwashingliquid', 'breadslice', 'paper', 'facecream', 'plum', 'faucet', 'microwave', 'cereal', 'radio', 'plate', 'doorjamb']"}, {'role': 'user', 'content': 'put_the_wine_glass_in_the_kitchen_cabinet'}, {'role': 'assistant', 'content': "def put_the_wine_glass_in_the_kitchen_cabinet():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find wine glass\n\tfind('wineglass')\n\t# 2: grab wine glass\n\tassert('close' to 'wineglass')\n\t\telse: find('wineglass')\n\tgrab('wineglass')\n\t# 3: find kitchen cabinet\n\tfind('kitchencabinet')\n\t# 4: open kitchen cabinet\n\tassert('close' to 'kitchencabinet' )  \n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'closed' )\n\t\telse: close('kitchencabinet')\n\topen('kitchencabinet')\n\t# 5: put wine glass in kitchen cabinet\n\tassert('wineglass' in 'hands' )\n\t\telse: find('wineglass')\n\t\telse: grab('wineglass')\n\tassert('close' to 'kitchencabinet' )  \n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'opened' )\n\t\telse: open('kitchencabinet')\n\tputin('wineglass', 'kitchencabinet')\n\t# 6: close kitchen cabinet\n\tassert('close' to 'kitchencabinet' )\n\t\telse: find('kitchencabinet')\n\tassert('kitchencabinet' is 'opened' )\n\t\telse: open('kitchencabinet')\n\tclose('kitchencabinet')\n\t# 7: Done"}, {'role': 'user', 'content': 'throw_away_the_lime'}, {'role': 'assistant', 'content': "def throw_away_the_lime():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find garbage can\n\tfind('garbagecan')\n\t# 2: grab lime\n\tfind('lime')\n\tassert('close' to 'lime')\n\t\telse: find('lime')\n\tgrab('lime')\n\t# 3: put lime in garbage can\n\tfind('garbagecan')\n\tassert('close' to 'garbagecan' )  \n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'closed' )\n\t\telse: close('garbagecan')\n\topen('garbagecan')\n\tassert('lime' in 'hands' )\n\t\telse: find('lime')\n\t\telse: grab('lime')\n\tassert('close' to 'garbagecan' )  \n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'opened' )\n\t\telse: open('garbagecan')\n\tputin('lime', 'garbagecan')\n\tassert('close' to 'garbagecan' )\n\t\telse: find('garbagecan')\n\tassert('garbagecan' is 'opened' )\n\t\telse: open('garbagecan')\n\tclose('garbagecan')\n\t# 4: Done"}, {'role': 'user', 'content': 'wash_mug'}, {'role': 'assistant', 'content': "def wash_mug():\n\t# 0: walk to kitchen\n\twalk('kitchen')\n\t# 1: find sink\n\tfind('sink')\n\t# 2: turn on faucet\n\tfind('faucet')\n\tfind('faucet')\n\tfind('faucet')\n\tassert('close' to 'faucet' )  \n\t\telse: find('faucet')\n\tassert('faucet' is 'switchoff' )\n\t\telse: switchoff('faucet')\n\tswitchon('faucet')\n\t# 3: put mug under water\n\tfind('mug')\n\tfind('mug')\n\tfind('mug')\n\tassert('close' to 'mug')\n\t\telse: find('mug')\n\tgrab('mug')\n\tfind('sink')\n\tassert('mug' in 'hands' )\n\t\telse: find('mug')\n\t\telse: grab('mug')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('mug', 'sink')\n\t# 4: grab dishwashing liquid\n\tfind('dishwashingliquid')\n\tassert('close' to 'dishwashingliquid')\n\t\telse: find('dishwashingliquid')\n\tgrab('dishwashingliquid')\n\t# 5: put dishwashing liquid on mug\n\tfind('sink')\n\tassert('dishwashingliquid' in 'hands' )\n\t\telse: find('dishwashingliquid')\n\t\telse: grab('dishwashingliquid')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('dishwashingliquid', 'sink')\n\t# 6: grab washingsponge\n\tfind('washingsponge')\n\tassert('close' to 'washingsponge')\n\t\telse: find('washingsponge')\n\tgrab('washingsponge')\n\t# 7: start scrubbing mug\n\tfind('sink')\n\tassert('washingsponge' in 'hands' )\n\t\telse: find('washingsponge')\n\t\telse: grab('washingsponge')\n\tassert('close' to 'sink' )  \n\t\telse: find('sink')\n\tputin('washingsponge', 'sink')\n\t# 8: rinse mug off with water 1\n\t# 9: dry mug with towel 1\n\t# 10: Done\n\tfind('faucet')\n\tassert('close' to 'faucet' )\n\t\telse: find('faucet')\n\tassert('faucet' is 'switchon' )\n\t\telse: switchon('faucet')\n\tswitchoff('faucet')"}]
+
+----Test set tasks----
+['throw away apple']
+Total: 1 tasks
+
+----PROMPT for state check----
+[{'role': 'user', 'content': 'You see: microwave is OFF and CLOSED, lightswitch is ON, cereal, bookshelf, book is CLOSED, bookshelf ON floor, microwave ON kitchencounterdrawer, salmon ON microwave, book INSIDE bookshelf, dishbowl INSIDE bookshelf, clothespile INSIDE bookshelf, bananas INSIDE bookshelf, box ON bookshelf, book ON kitchentable, dishbowl ON bookshelf, condimentshaker INSIDE bookshelf, box INSIDE bookshelf, character HOLD_RH book, book ON rug, cereal ON wallshelf, plate INSIDE microwave, condimentbottle INSIDE bookshelf, microwave ON kitchencounter, paper INSIDE bookshelf'}, {'role': 'user', 'content': "assert('close' to 'mug' )"}, {'role': 'assistant', 'content': 'False'}, {'role': 'user', 'content': "assert('close' to 'microwave' )"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('book' is 'closed' )"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('lightswitch' is 'OFF')"}, {'role': 'assistant', 'content': 'False'}, {'role': 'user', 'content': "assert('book' in 'bookshelf')"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('book' in 'hands')"}, {'role': 'assistant', 'content': 'True'}, {'role': 'user', 'content': "assert('cereal' on 'bookshelf')"}, {'role': 'assistant', 'content': 'False'}]
+
+--Executing task: throw away apple--
+Plan:  def throw_away_apple():
+	# 0: walk to kitchen
+	walk('kitchen')
+	# 1: find garbage can
+	find('garbagecan')
+	# 2: grab apple
+	find('apple')
+	assert('close' to 'apple')
+		else: find('apple')
+	grab('apple')
+	# 3: put apple in garbage can
+	find('garbagecan')
+	assert('close' to 'garbagecan' )  
+		else: find('garbagecan')
+	assert('garbagecan' is 'closed' )
+		else: close('garbagecan')
+	open('garbagecan')
+	assert('apple' in 'hands' )
+		else: find('apple')
+		else: grab('apple')
+	assert('close' to 'garbagecan' )  
+		else: find('garbagecan')
+	assert('garbagecan' is 'opened' )
+		else: open('garbagecan')
+	putin('apple', 'garbagecan')
+	assert('close' to 'garbagecan' )
+		else: find('garbagecan')
+	assert('garbagecan' is 'opened' )
+		else: open('garbagecan')
+	close('garbagecan')
+	# 4:Done
+
+<char0> [walk] <kitchen> (205)
+Action: [WALK] <kitchen> (205) [0], act_return: True
+<char0> [find] <garbagecan> (229)
+Action: [FIND] <garbagecan> (229) [0], act_return: True
+<char0> [find] <apple> (437)
+Action: [FIND] <apple> (437) [0], act_return: True
+State check:
+You see: apple, apple ON coffeetable.
+assert('close' to 'apple')
+True
+<char0> [grab] <apple> (437)
+Action: [GRAB] <apple> (437) [0], act_return: True
+<char0> [find] <garbagecan> (229)
+Action: [FIND] <garbagecan> (229) [0], act_return: True
+State check:
+You see: garbagecan is CLOSED
+assert('close' to 'garbagecan' )
+True
+State check:
+You see: garbagecan is CLOSED
+assert('garbagecan' is 'closed' )
+True
+<char0> [open] <garbagecan> (229)
+Action: [OPEN] <garbagecan> (229) [0], act_return: True
+State check:
+You see: apple, .  You have apple.
+assert('apple' in 'hands' )
+True
+State check:
+You see: garbagecan is OPEN
+assert('close' to 'garbagecan' )
+True
+State check:
+You see: garbagecan is OPEN
+assert('garbagecan' is 'opened' )
+True
+<char0> [putin] <apple> (437) <garbagecan> (229)
+Action: [PUTIN] <apple> (437) <garbagecan> (229) [0], act_return: True
+State check:
+You see: garbagecan is OPEN, apple INSIDE garbagecan.
+assert('close' to 'garbagecan' )
+True
+State check:
+You see: garbagecan is OPEN, apple INSIDE garbagecan.
+assert('garbagecan' is 'opened' )
+True
+<char0> [close] <garbagecan> (229)
+Action: [CLOSE] <garbagecan> (229) [0], act_return: True
+
+exec_per_task: [1.0]
+
+unsatisfied state conditions: relations: {'character CLOSE floor', 'coffeepot INSIDE bedroom', 'coffeetable CLOSE character', 'character INSIDE bedroom', 'cupcake ON coffeetable', 'floor CLOSE character', 'coffeetable CLOSE coffeepot', 'character CLOSE cupcake', 'cupcake CLOSE coffeetable', 'cupcake CLOSE character', 'coffeetable CLOSE cupcake', 'coffeepot ON coffeetable', 'character CLOSE coffeetable', 'coffeepot CLOSE coffeetable'}, object states: set()

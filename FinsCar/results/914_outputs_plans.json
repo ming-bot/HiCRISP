@@ -1,0 +1,1 @@
+{"cover area by the order: 3, 2, 1": "def cover_area_3_2_1():\n\t# 0: move to area 2\n\tmoveto('Area2')\n\t# 1: move to area 3\n\tmoveto('Area3')\n\t# 2: move to area 1\n\tmoveto('Area1')\n\t# 3:Done"}

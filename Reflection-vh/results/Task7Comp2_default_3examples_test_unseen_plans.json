@@ -1,0 +1,1 @@
+{"turn off light": "def turn_off_light():\n\t# 0: find light switch\n\tfind('lightswitch')\n\t# 1: switch off light\n\tassert('lightswitch' is 'switchon' )\n\t\telse: switchon('lightswitch')\n\tswitchoff('lightswitch')\n\t# 2:Done"}
