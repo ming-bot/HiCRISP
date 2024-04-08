@@ -1,0 +1,92 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['cyan block', 'gray block', 'pink block', 'brown block', 'red bowl']"}]
+
+----Test set tasks----
+Store two blocks in the bowl
+
+--Executing task: Store two blocks in the bowl--
+Plan:   def store_two_blocks_in_the_bowl():
+    # 0: find a block
+    find('pink block')
+    # 1: Pick the block
+    pick('pink block')
+    # 2: find another block
+    find('brown block')
+    # 3: Pick the second block
+    pick('brown block')
+    # 4: find a bowl
+    find('red bowl')
+    # 5: put the block in the bowl
+    place('red bowl')
+    # 6: find the pink block
+    find('pink block')
+    # 7: Pick the block
+    pick('pink block')
+    # 8: put the block in the bowl
+    place('red bowl')
+
+
+Executing action: find pink block
+
+(True, array([ 0.15104455, -0.36910537,  0.02098936], dtype=float32))
+
+
+success
+Executing action: pick pink block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: find brown block
+
+(True, array([ 0.01145455, -0.55656564,  0.02098936], dtype=float32))
+
+
+success
+Executing action: pick brown block
+
+(False, 'The robot should place the object it has before picks another.')
+
+Low level correction action: place [ 0.04052935 -0.55703352  0.        ].
+(True, 'The action is legal')
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: find red bowl
+
+(True, array([-0.17282094, -0.6925728 ,  0.02      ], dtype=float32))
+
+
+success
+Executing action: place red bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: find pink block
+
+(True, array([ 0.09572648, -0.5618833 ,  0.02098887], dtype=float32))
+
+
+success
+Executing action: pick pink block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: place red bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+exec_subtasks: [9]
+total_subtasks: [10]

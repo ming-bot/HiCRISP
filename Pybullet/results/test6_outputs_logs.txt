@@ -1,0 +1,63 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['green block', 'blue block', 'purple bowl', 'pink bowl']"}]
+
+----Test set tasks----
+put each block into each bowl
+
+--Executing task: put each block into each bowl--
+Plan:  def put_each_block_into_each_bowl():
+    # 0: find all blocks and all bowls
+    find('green block')
+    find('blue block')
+    find('purple bowl')
+    find('pink bowl')
+    # 1: Pick the green block and place it in the purple bowl
+    pick('green block')
+    place('purple bowl')
+    # 2: Pick the blue block and place it in the pink bowl
+    pick('blue block')
+    place('pink bowl')
+
+Executing action: find green block
+
+(True, array([ 0.12859148, -0.4720995 ,  0.02098936], dtype=float32))
+
+Executing action: find blue block
+
+(True, array([-0.07774191, -0.51728296,  0.02098936], dtype=float32))
+
+Executing action: find purple bowl
+
+(True, array([ 1.3572015e-04, -6.5294844e-01,  2.0000000e-02], dtype=float32))
+
+Executing action: find pink bowl
+
+(True, array([-0.04568614, -0.31552806,  0.02      ], dtype=float32))
+
+
+success
+Executing action: pick green block
+
+(True, 'The action is legal.')
+
+Executing action: place purple bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: pick blue block
+
+(True, 'The action is legal.')
+
+Executing action: place pink bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+exec_subtasks: [3]
+total_subtasks: [8]

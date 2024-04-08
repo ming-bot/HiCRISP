@@ -1,0 +1,271 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['yellow block', 'gray block', 'blue block', 'green bowl', 'cyan bowl', 'brown bowl', 'pink bowl']"}]
+
+----Test set tasks----
+put all warm color blocks in the green bowl
+
+--Executing task: put all warm color blocks in the green bowl--
+Plan:  def put_all_warm_color_blocks_in_the_green_bowl():
+    # 0: find the warm color blocks
+    find('yellow block')
+    find('orange block')
+    # 1: Pick the yellow block
+    pick('yellow block')
+    # 2: Put the yellow block in the green bowl
+    place('green bowl')
+    # 3: Pick the orange block
+    pick('orange block')
+    # 4: Put the orange block in the green bowl
+    place('green bowl')
+
+
+Executing action: find yellow block
+
+(True, array([-0.02814156, -0.4702123 ,  0.02098936], dtype=float32))
+
+
+success
+Executing action: find orange block
+
+(False, "The scence doesn't have the object.")
+
+
+fail, scence doesn't have the object.
+find('orange block') fail, scence doesn't have the object.
+
+fix action is: find('orange block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, scence doesn't have the object.
+
+
+FixAction_Return: fail, scence doesn't have the object.
+find('orange block') fail, scence doesn't have the object.
+
+fix action is: find('orange block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, scence doesn't have the object.
+
+
+FixAction_Return: fail, scence doesn't have the object.
+find('orange block') fail, scence doesn't have the object.
+
+fix action is: find('orange block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, scence doesn't have the object.
+
+
+FixAction_Return: fail, scence doesn't have the object.
+find('orange block') fail, scence doesn't have the object.
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, scence doesn't have the object.
+
+
+FixAction_Return: fail, scence doesn't have the object.
+pick('yellow bowl') fail, scence doesn't have the object.
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, scence doesn't have the object.
+
+
+FixAction_Return: fail, scence doesn't have the object.
+pick('yellow bowl') fail, scence doesn't have the object.
+
+fix action is: find('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, scence doesn't have the object.
+
+
+FixAction_Return: fail, scence doesn't have the object.
+find('yellow bowl') fail, scence doesn't have the object.
+
+fix action is: find('yellow block')
+
+Fixact_result: (True, array([-0.02814156, -0.4702123 ,  0.02098936], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['find', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+Succesfully handle the error, and achieve the goal.We use 7 step(s) to fix the problem.
+
+success
+Executing action: pick yellow block
+
+(True, 'The action is legal.')
+
+
+success
+
+success
+Executing action: place green bowl
+
+(False, 'The robot should find the object first.')
+
+
+fail, the robot should find the object first.
+place('green bowl') fail, the robot should find the object first.
+
+fix action is: find('green bowl')
+
+Fixact_result: (True, array([ 0.11386461, -0.36289063,  0.02      ], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['place', 'green', 'bowl']
+
+TRYact_result: (True, 'The action is legal')
+
+success
+TRYact_state: Fix successfully
+Succesfully handle the error, and achieve the goal.We use 1 step(s) to fix the problem.
+
+success
+Executing action: pick orange block
+
+(False, "The scence doesn't have the object.")
+
+
+fail, the scene doesn't have the object.
+pick('orange block') fail, the scene doesn't have the object.
+
+fix action is: find('orange block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+find('orange block') fail, the scene doesn't have the object.
+
+fix action is: find('orange block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+find('orange block') fail, the scene doesn't have the object.
+
+fix action is: find('yellow block')
+
+Fixact_result: (True, array([ 0.11496807, -0.36077264,  0.03014891], dtype=float32))
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+find('yellow block') fail, the scene doesn't have the object.
+
+fix action is: pick('yellow block')
+
+Fixact_result: (True, 'The action is legal.')
+success
+
+
+FixAction_Return: success
+
+TRYact:['find', 'yellow', 'block']
+
+TRYact_result: (True, array([ 0.11442319, -0.36328396,  0.19599804], dtype=float32))
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'orange', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+Succesfully handle the error, and achieve the goal.We use 4 step(s) to fix the problem.
+
+success
+Executing action: place green bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+
+success
+exec_subtasks: [5]
+total_subtasks: [18]
+
+Taking time:  250.61986994743347
+exec_subtasks:  [5]
+total_steps:  [18]

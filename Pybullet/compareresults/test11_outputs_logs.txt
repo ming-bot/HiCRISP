@@ -1,0 +1,183 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['gray block', 'cyan block', 'pink bowl', 'green bowl', 'red bowl']"}]
+
+----Test set tasks----
+put blocks in bowls until only one bowl is empty
+
+--Executing task: put blocks in bowls until only one bowl is empty--
+Plan:  def put_blocks_in_bowls_until_only_one_bowl_is_empty():
+    # 0: find blocks
+    find('gray block')
+    find('cyan block')
+    # 1: Pick the blocks
+    pick('gray block')
+    pick('cyan block')
+    # 2: find bowls
+    find('pink bowl')
+    find('green bowl')
+    find('red bowl')
+    # 3: put the blocks in the bowls
+    place('pink bowl')
+    place('green bowl')
+    place('red bowl')
+
+
+Executing action: find gray block
+
+(True, array([ 0.00128271, -0.3242617 ,  0.02098936], dtype=float32))
+
+
+success
+Executing action: find cyan block
+
+(True, array([-0.09408586, -0.50685984,  0.02098936], dtype=float32))
+
+
+success
+
+success
+Executing action: pick gray block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: pick cyan block
+
+(False, 'The robot should place the object it has before picks another.')
+
+
+fail, the robot should place the object it has before picks another.
+pick('cyan block') fail, the robot should place the object it has before picks another.
+
+fix action is: place('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+place('blue block') fail, the scene doesn't have the object.
+
+fix action is: place('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+place('blue block') fail, the scene doesn't have the object.
+
+fix action is: place('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+place('blue block') fail, the scene doesn't have the object.
+
+fix action is: place('green bowl')
+
+Fixact_result: (False, 'The robot should find the object first.')
+fail, the robot should find the object first.
+
+
+FixAction_Return: fail, the robot should find the object first.
+place('green bowl') fail, the robot should find the object first.
+
+fix action is: find('green bowl')
+place('green bowl')
+
+Fixact_result: (True, array([ 0.11814737, -0.66695124,  0.02      ], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['place', 'green', 'bowl']
+
+TRYact_result: (True, 'The action is legal')
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['place', 'blue', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['place', 'blue', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['place', 'blue', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'cyan', 'block']
+
+TRYact_result: (True, 'The action is legal.')
+
+success
+TRYact_state: Fix successfully
+Succesfully handle the error, and achieve the goal.We use 5 step(s) to fix the problem.
+
+success
+Executing action: find pink bowl
+
+(True, array([ 0.12393106, -0.41034016,  0.02      ], dtype=float32))
+
+
+success
+Executing action: find green bowl
+
+(True, array([ 0.11814737, -0.66695124,  0.02      ], dtype=float32))
+
+
+success
+Executing action: find red bowl
+
+(True, array([-0.13111418, -0.6616805 ,  0.02      ], dtype=float32))
+
+
+success
+
+success
+Executing action: place pink bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: place green bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: place red bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+
+
+exec_subtasks: [4]
+total_subtasks: [15]
+
+Taking time:  106.17490696907043
+exec_subtasks:  [4]
+total_steps:  [15]

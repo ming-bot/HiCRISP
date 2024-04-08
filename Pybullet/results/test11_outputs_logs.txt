@@ -1,0 +1,157 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['gray block', 'cyan block', 'pink bowl', 'green bowl', 'red bowl']"}]
+
+----Test set tasks----
+put blocks in bowls until only one bowl is empty
+
+--Executing task: put blocks in bowls until only one bowl is empty--
+Plan:  def put_blocks_in_bowls_until_only_one_bowl_is_empty():
+	# 0: find blocks
+	find('gray block')
+	find('cyan block')
+	# 1: Pick the blocks
+	pick('gray block')
+	pick('cyan block')
+	# 2: find bowls
+	find('pink bowl')
+	find('green bowl')
+	find('red bowl')
+	# 3: put the blocks in the bowls
+	place('pink bowl')
+	place('green bowl')
+	place('red bowl')
+
+Executing action: find gray block
+
+(True, array([-0.06917921, -0.3492138 ,  0.02098936], dtype=float32))
+
+Executing action: find cyan block
+
+(True, array([ 0.19736016, -0.5230922 ,  0.02098936], dtype=float32))
+
+
+success
+Executing action: pick gray block
+
+(True, 'The action is legal.')
+
+Executing action: pick cyan block
+
+(False, 'The robot should place the object it has before picks another.')
+
+Low level correction action: place [-0.18725729 -0.66134426  0.        ].
+(True, 'The action is legal')
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: find pink bowl
+
+(True, array([-0.14829388, -0.48927927,  0.02      ], dtype=float32))
+
+Executing action: find green bowl
+
+(True, array([-0.05225978, -0.6137003 ,  0.02      ], dtype=float32))
+
+Executing action: find red bowl
+
+(True, array([ 0.1064558 , -0.33327717,  0.02      ], dtype=float32))
+
+
+success
+Executing action: place pink bowl
+
+(True, 'The action is legal')
+
+Executing action: place green bowl
+
+(True, 'The action is legal')
+
+Executing action: place red bowl
+
+(True, 'The action is legal')
+
+
+success
+
+fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+Complete('task') fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+
+fix action is: pick('gray block')
+fail, because the block is not in that position. Maybe the robot should find it first
+
+
+FixAction_Return: fail, because the block is not in that position. Maybe the robot should find it first
+pick('gray block') fail, because the block is not in that position. Maybe the robot should find it first
+
+fix action is: find('gray block')
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'gray', 'block']
+Low level correction action: place [ 0.03149836 -0.64637327  0.        ].
+(True, 'The action is legal')
+
+(True, 'The action is legal.')
+
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['Complete', 'task']
+
+fail, the robot has a gray block, it should place it in an empty bowl.
+TRYact_result: fail, the robot has a gray block, it should place it in an empty bowl.
+Complete('task') fail, the robot has a gray block, it should place it in an empty bowl.
+
+fix action is: pick('gray block')
+Low level correction action: place [-0.09842272 -0.68300227  0.        ].
+(True, 'The action is legal')
+
+(True, 'The action is legal.')
+
+fail, because the block is not in that position. Maybe the robot should find it first
+
+
+FixAction_Return: fail, because the block is not in that position. Maybe the robot should find it first
+pick('gray block') fail, because the block is not in that position. Maybe the robot should find it first
+
+fix action is: find('gray block')
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'gray', 'block']
+Low level correction action: place [ 0.18232137 -0.31320553  0.        ].
+(True, 'The action is legal')
+
+(True, 'The action is legal.')
+
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['Complete', 'task']
+
+fail, Try "place('red bowl')"
+TRYact_result: fail, Try "place('red bowl')"
+Complete('task') fail, Try "place('red bowl')"
+
+fix action is: place('red bowl')
+success
+
+
+FixAction_Return: success
+
+TRYact:['Complete', 'task']
+
+success
+TRYact_state: Fix successfully
+Succesfully handle the error, and achieve the goal.We use 8 step(s) to fix the problem.
+exec_subtasks: [4]
+total_subtasks: [19]

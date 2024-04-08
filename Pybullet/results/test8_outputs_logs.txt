@@ -1,0 +1,67 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['gray block', 'blue block', 'orange bowl', 'green bowl']"}]
+
+----Test set tasks----
+put all blocks in a bowl
+
+--Executing task: put all blocks in a bowl--
+Plan:  def put_all_blocks_in_a_bowl():
+	# 0: find all blocks
+	find('gray block')
+	find('blue block')
+	# 1: Pick the gray block
+	pick('gray block')
+	# 2: find a bowl
+	find('orange bowl')
+	# 3: put the gray block in the bowl
+	place('orange bowl')
+	# 4: Pick the blue block
+	pick('blue block')
+	# 5: put the blue block in the bowl
+	place('orange bowl')
+
+Executing action: find gray block
+
+(True, array([ 0.19840506, -0.6516872 ,  0.02098936], dtype=float32))
+
+Executing action: find blue block
+
+(True, array([ 0.1666105 , -0.3603876 ,  0.02098936], dtype=float32))
+
+
+sucess
+Executing action: pick gray block
+
+(True, 'The action is legal.')
+
+
+sucess
+Executing action: find orange bowl
+
+(True, array([-0.09054483, -0.63649344,  0.02      ], dtype=float32))
+
+
+sucess
+Executing action: place orange bowl
+
+(True, 'The action is legal')
+
+
+sucess
+Executing action: pick blue block
+
+(True, 'The action is legal.')
+
+
+sucess
+Executing action: place orange bowl
+
+(True, 'The action is legal')
+
+
+sucess
+
+sucess
+exec_subtasks: [6]
+total_subtasks: [7]

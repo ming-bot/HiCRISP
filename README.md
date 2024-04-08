@@ -36,3 +36,9 @@ To obtain detailed instructions on how to download  [VirtualHome](https://github
 
 
 Note: Due to the limitations of the author's expertise, the code requires you to **modify the paths and undertake other necessary adjustments according to your system**. The overall portability aspect of the code could be improved, and we welcome any criticism and suggestions from everyone to help with its modification.
+
+
+
+## Update
+
+Update Pybullet environment experience, code could see in the folder: Pybullet.

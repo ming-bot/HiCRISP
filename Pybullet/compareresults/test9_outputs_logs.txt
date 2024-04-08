@@ -1,0 +1,202 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['yellow block', 'blue block', 'gray block', 'orange bowl', 'pink bowl', 'purple bowl', 'yellow bowl']"}]
+
+----Test set tasks----
+put two blocks in a cool color bowl
+
+--Executing task: put two blocks in a cool color bowl--
+Plan:   def put_two_blocks_in_a_cool_color_bowl():
+    # 0: find two blocks
+    find('yellow block')
+    find('blue block')
+    # 1: Pick the blocks
+    pick('yellow block')
+    pick('blue block')
+    # 2: find a cool color bowl
+    find('purple bowl')
+    # 3: put the blocks in the bowl
+    place('purple bowl')
+
+
+Executing action: find yellow block
+
+(True, array([-0.00858939, -0.6492346 ,  0.02098936], dtype=float32))
+
+
+success
+Executing action: find blue block
+
+(True, array([ 0.0973134 , -0.35088527,  0.02098936], dtype=float32))
+
+
+success
+
+success
+Executing action: pick yellow block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: pick blue block
+
+(False, 'The robot should place the object it has before picks another.')
+
+
+success
+
+success
+Executing action: find purple bowl
+
+(True, array([-0.20356548, -0.68479687,  0.02      ], dtype=float32))
+
+
+success
+
+success
+Executing action: place purple bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+
+fail, the robot should pick another block and place it in the purple bowl
+Complete('task') fail, the robot should pick another block and place it in the purple bowl
+
+fix action is: pick('yellow block')  
+place('purple bowl')
+
+Fixact_result: (True, 'The action is legal.')
+fail, the block is not in that position. Maybe it should find it first
+
+
+FixAction_Return: fail, the block is not in that position. Maybe it should find it first
+pick('yellow block') fail, the block is not in that position. Maybe it should find it first
+
+fix action is: find('yellow block')
+
+Fixact_result: (True, array([-0.20607844, -0.68363124,  0.03013491], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'yellow', 'block']
+
+TRYact_result: (False, 'The robot should place the object it has before picks another.')
+
+fail the robot should place the object it has before picks another
+TRYact_result: fail the robot should place the object it has before picks another
+pick('yellow block') fail the robot should place the object it has before picks another
+
+fix action is: place('blue block')
+
+Fixact_result: (True, 'The action is legal')
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'yellow', 'block']
+
+TRYact_result: (True, 'The action is legal.')
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['Complete', 'task']
+
+TRYact_result: (True, 'The action is legal')
+
+fail, the robot should pick another block and place it in the purple bowl
+TRYact_result: fail, the robot should pick another block and place it in the purple bowl
+Complete('task') fail, the robot should pick another block and place it in the purple bowl
+
+fix action is: pick('blue block')
+place('purple bowl')
+
+Fixact_result: (False, 'The robot should place the object it has before picks another.')
+fail the robot should place the object it has before picks another
+
+
+FixAction_Return: fail the robot should place the object it has before picks another
+pick('blue block') fail the robot should place the object it has before picks another
+
+fix action is: place('previous object')  
+pick('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object
+
+
+FixAction_Return: fail, the scence doesn't have the object
+place('previous object') fail, the scence doesn't have the object
+
+fix action is: find('previous object')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object
+
+
+FixAction_Return: fail, the scence doesn't have the object
+find('previous object') fail, the scence doesn't have the object
+
+fix action is: find('yellow bowl')
+
+Fixact_result: (True, array([-0.01231796, -0.47602218,  0.02      ], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['find', 'previous', 'object']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['place', 'previous', 'object']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'blue', 'block']
+
+TRYact_result: (False, 'The robot should place the object it has before picks another.')
+
+fail the robot should place the object it has before picks another
+TRYact_result: fail the robot should place the object it has before picks another
+pick('blue block') fail the robot should place the object it has before picks another
+
+fix action is: place('blue block')
+pick('yellow bowl')
+
+Fixact_result: (True, 'The action is legal')
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'blue', 'block']
+
+TRYact_result: (True, 'The action is legal.')
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['Complete', 'task']
+
+TRYact_result: (True, 'The action is legal')
+
+success
+TRYact_state: Fix successfully
+Succesfully handle the error, and achieve the goal.We use 8 step(s) to fix the problem.
+exec_subtasks: [4]
+total_subtasks: [14]

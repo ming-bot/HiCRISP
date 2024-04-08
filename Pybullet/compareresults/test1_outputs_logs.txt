@@ -1,0 +1,199 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['cyan block', 'gray block', 'pink block', 'brown block', 'red bowl']"}]
+
+----Test set tasks----
+Store two blocks in the bowl
+
+--Executing task: Store two blocks in the bowl--
+Plan:   def store_two_blocks_in_the_bowl():
+    # 0: find a block
+    find('pink block')
+    # 1: Pick the block
+    pick('pink block')
+    # 2: find another block
+    find('brown block')
+    # 3: Pick the second block
+    pick('brown block')
+    # 4: find a bowl
+    find('red bowl')
+    # 5: put the blocks in the bowl
+    place('red bowl')
+
+Executing action: find pink block
+
+(True, array([-0.18460432, -0.44324622,  0.02098936], dtype=float32))
+
+
+success
+
+success
+Executing action: pick pink block
+
+(True, 'The action is legal.')
+
+
+success
+
+success
+Executing action: find brown block
+
+(True, array([-0.10000878, -0.6761169 ,  0.02098936], dtype=float32))
+
+
+success
+
+success
+Executing action: pick brown block
+
+(False, 'The robot should place the object it has before picks another.')
+
+
+fail, the robot should place the object it has before picks another.
+pick('brown block') fail, the robot should place the object it has before picks another.
+
+fix action is: place('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+place('blue block') fail, the scence doesn't have the object.
+
+fix action is: place('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+place('blue block') fail, the scence doesn't have the object.
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+pick('yellow bowl') fail, the scence doesn't have the object.
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+pick('yellow bowl') fail, the scence doesn't have the object.
+
+fix action is: find('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+find('yellow bowl') fail, the scence doesn't have the object.
+
+fix action is: find('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+find('yellow bowl') fail, the scence doesn't have the object.
+
+fix action is: find('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+find('yellow bowl') fail, the scence doesn't have the object.
+
+fix action is: pick('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object. There exits 'cyan block', 'gray block', 'pink block', 'brown block', 'red bowl'
+
+
+FixAction_Return: fail, the scence doesn't have the object. There exits 'cyan block', 'gray block', 'pink block', 'brown block', 'red bowl'
+pick('blue block') fail, the scence doesn't have the object. There exits 'cyan block', 'gray block', 'pink block', 'brown block', 'red bowl'
+
+fix action is: pick('gray block')
+
+Fixact_result: (False, 'The robot should find the object first.')
+fail, the robot should find the object first.
+
+
+FixAction_Return: fail, the robot should find the object first.
+pick('gray block') fail, the robot should find the object first.
+
+fix action is: find('gray block')
+pick('gray block')
+
+Fixact_result: (True, array([ 0.1016789 , -0.57526374,  0.02098936], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'gray', 'block']
+
+TRYact_result: (False, 'The robot should place the object it has before picks another.')
+
+fail, the robot should place the object it has before picks another. it has a block
+TRYact_result: fail, the robot should place the object it has before picks another. it has a block
+Can't handle the error. Please regenerate the task list.
+
+success
+Executing action: find red bowl
+
+(True, array([ 0.1535231 , -0.34602576,  0.02      ], dtype=float32))
+
+
+success
+
+success
+Executing action: place red bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+
+fail, the robot should pick another block and place it in the bowl
+Complete('task') fail, the robot should pick another block and place it in the bowl
+
+fix action is: pick('another block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+pick('another block') fail, the scence doesn't have the object.
+
+fix action is: pick('another block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+pick('another block') fail, the scence doesn't have the object.
+
+fix action is: find('another block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scence doesn't have the object.
+
+
+FixAction_Return: fail, the scence doesn't have the object.
+find('another block') fail, the scence doesn't have the object.

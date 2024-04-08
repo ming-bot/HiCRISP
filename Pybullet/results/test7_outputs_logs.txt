@@ -1,0 +1,78 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['gray block', 'brown block', 'brown bowl', 'gray bowl']"}]
+
+----Test set tasks----
+classfy blocks according to the color of the bowl
+
+--Executing task: classfy blocks according to the color of the bowl--
+Plan:  def classfy_blocks_according_to_the_color_of_the_bowl():
+    # 0: find a gray block
+	find('gray block')
+	# 1: Pick the gray block
+	pick('gray block')
+	# 2: find a gray bowl
+	find('gray bowl')
+	# 3: put the gray block in the gray bowl
+	place('gray bowl')
+	# 4: find a brown block
+	find('brown block')
+	# 5: Pick the brown block
+	pick('brown block')
+	# 6: find a brown bowl
+	find('brown bowl')
+	# 7: put the brown block in the brown bowl
+	place('brown bowl')
+
+Executing action: find gray block
+
+(True, array([-0.04195442, -0.35080975,  0.02098936], dtype=float32))
+
+
+success
+Executing action: pick gray block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: find gray bowl
+
+(True, array([ 0.16073216, -0.46606618,  0.02      ], dtype=float32))
+
+
+success
+Executing action: place gray bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: find brown block
+
+(True, array([-0.11857576, -0.54995245,  0.02098936], dtype=float32))
+
+
+success
+Executing action: pick brown block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: find brown bowl
+
+(True, array([ 0.01407287, -0.49760878,  0.02      ], dtype=float32))
+
+
+success
+Executing action: place brown bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+exec_subtasks: [8]
+total_subtasks: [8]

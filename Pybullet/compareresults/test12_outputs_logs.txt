@@ -1,0 +1,389 @@
+
+----PROMPT for planning----
+[{'role': 'system', 'content': 'You are a senior robot code engineer'}, {'role': 'user', 'content': 'Here i give you some code format examples.'}, {'role': 'user', 'content': 'pick up a block'}, {'role': 'assistant', 'content': "def pick_up_a_block():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t"}, {'role': 'user', 'content': 'put a block in a bowl'}, {'role': 'assistant', 'content': "def put_a_block_in_bowl():\n\t# 0: find a block\n\tfind('blue block')\n\t# 1: Pick the block\n\tpick('blue block')\n\t# 2: find a bowl\n\tfind('pink bowl')\n\t# 3: put the block in the bowl\n\tplace('pink bowl')\n\t"}, {'role': 'system', 'content': 'You can only use these functions: find <obj>, pick <obj>, place <obj>, and the code should not be for/while structure.'}, {'role': 'system', 'content': "You can only replace above <obj> with objects that are :['gray block', 'cyan block', 'pink bowl', 'green bowl', 'red bowl']"}]
+
+----Test set tasks----
+put blocks in bowls until only one bowl is empty
+
+--Executing task: put blocks in bowls until only one bowl is empty--
+Plan:  def put_blocks_in_bowls_until_only_one_bowl_is_empty():
+    # 0: find blocks
+    find('gray block')
+    find('cyan block')
+    # 1: Pick the blocks
+    pick('gray block')
+    pick('cyan block')
+    # 2: find bowls
+    find('pink bowl')
+    find('green bowl')
+    find('red bowl')
+    # 3: put the blocks in the bowls
+    place('pink bowl')
+    place('green bowl')
+    place('red bowl')
+
+
+Executing action: find gray block
+
+(True, array([-0.00456641, -0.55099607,  0.02098936], dtype=float32))
+
+
+success
+Executing action: find cyan block
+
+(True, array([-0.11448893, -0.6827329 ,  0.02098936], dtype=float32))
+
+
+success
+
+success
+Executing action: pick gray block
+
+(True, 'The action is legal.')
+
+
+success
+Executing action: pick cyan block
+
+(False, 'The robot should place the object it has before picks another.')
+
+
+success
+
+fail, the robot should place the object it has before picks another.
+pick('cyan block') fail, the robot should place the object it has before picks another.
+
+fix action is: pick('cyan block')
+
+Fixact_result: (False, 'The robot should place the object it has before picks another.')
+fail, the robot should place the object it has before picks another.
+
+
+FixAction_Return: fail, the robot should place the object it has before picks another.
+pick('cyan block') fail, the robot should place the object it has before picks another.
+
+fix action is: pick('cyan block')
+place('blue block')
+
+Fixact_result: (False, 'The robot should place the object it has before picks another.')
+fail, the robot should place the object it has before picks another.
+
+
+FixAction_Return: fail, the robot should place the object it has before picks another.
+pick('cyan block') fail, the robot should place the object it has before picks another.
+
+fix action is: place()
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+place('place') fail, the scene doesn't have the object.
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+pick('yellow bowl') fail, the scene doesn't have the object.
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+pick('yellow bowl') fail, the scene doesn't have the object.
+
+fix action is: pick('green bowl')
+
+Fixact_result: (False, 'The robot should find the object first.')
+fail, the robot should find the object first.
+
+
+FixAction_Return: fail, the robot should find the object first.
+pick('green bowl') fail, the robot should find the object first.
+
+fix action is: find('green bowl')
+
+Fixact_result: (True, array([ 0.12628235, -0.5261511 ,  0.02      ], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['pick', 'green', 'bowl']
+
+TRYact_result: (False, 'The robot should place the object it has before picks another.')
+
+fail, the robot should place the object it has before picks another.
+TRYact_result: fail, the robot should place the object it has before picks another.
+pick('green bowl') fail, the robot should place the object it has before picks another.
+
+fix action is: place('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the robot should find the object first.
+
+
+FixAction_Return: fail, the robot should find the object first.
+place('blue block') fail, the robot should find the object first.
+
+fix action is: find('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object.
+
+
+FixAction_Return: fail, the scene doesn't have the object.
+find('blue block') fail, the scene doesn't have the object.
+
+fix action is: find('gray block')
+
+Fixact_result: (True, array([-0.00516462, -0.5516579 ,  0.18996128], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['find', 'blue', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['place', 'blue', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'green', 'bowl']
+
+TRYact_result: (False, 'The robot should place the object it has before picks another.')
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['place']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'cyan', 'block']
+
+TRYact_result: (False, 'The robot should place the object it has before picks another.')
+
+fail, the robot should place the object it has before picks another.
+TRYact_result: fail, the robot should place the object it has before picks another.
+Can't handle the error. Please regenerate the task list.
+Executing action: find pink bowl
+
+(True, array([-0.17705241, -0.49027762,  0.02      ], dtype=float32))
+
+
+success
+Executing action: find green bowl
+
+(True, array([ 0.12628235, -0.5261511 ,  0.02      ], dtype=float32))
+
+
+success
+Executing action: find red bowl
+
+(True, array([-0.05171107, -0.3548165 ,  0.02      ], dtype=float32))
+
+
+success
+
+success
+Executing action: place pink bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: place green bowl
+
+(True, 'The action is legal')
+
+
+success
+Executing action: place red bowl
+
+(True, 'The action is legal')
+
+
+success
+
+success
+
+fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+Complete('task') fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+
+fix action is: pick('block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+pick('block') fail, the scene doesn't have the object
+
+fix action is: pick('block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+pick('block') fail, the scene doesn't have the object
+
+fix action is: find('blue block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+find('blue block') fail, the scene doesn't have the object
+
+fix action is: pick('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+pick('yellow bowl') fail, the scene doesn't have the object
+
+fix action is: find('yellow bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+find('yellow bowl') fail, the scene doesn't have the object
+
+fix action is: find('green bowl')
+
+Fixact_result: (True, array([ 0.12628235, -0.5261511 ,  0.02      ], dtype=float32))
+success
+
+
+FixAction_Return: success
+
+TRYact:['find', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'yellow', 'bowl']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['find', 'blue', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['pick', 'block']
+
+TRYact_result: (False, "The scence doesn't have the object.")
+
+success
+TRYact_state: Fix successfully
+
+TRYact:['Complete', 'task']
+
+TRYact_result: (True, 'The action is legal')
+
+fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+TRYact_result: fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+Complete('task') fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+
+fix action is: pick('gray block')
+
+Fixact_result: (True, 'The action is legal.')
+success
+
+
+FixAction_Return: success
+
+TRYact:['Complete', 'task']
+
+TRYact_result: (True, 'The action is legal')
+
+fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+TRYact_result: fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+Complete('task') fail, two bowls are empty, the robot should pick a block and place it in a empty bowl
+
+fix action is: find('block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+find('block') fail, the scene doesn't have the object
+
+fix action is: find('bowl')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+find('bowl') fail, the scene doesn't have the object
+
+fix action is: find('red block')
+
+Fixact_result: (False, "The scence doesn't have the object.")
+fail, the scene doesn't have the object
+
+
+FixAction_Return: fail, the scene doesn't have the object
+Can't handle the error. Please regenerate the task list.
+exec_subtasks: [3]
+total_subtasks: [30]
+
+Taking time:  337.8279011249542
+exec_subtasks:  [3]
+total_steps:  [30]
